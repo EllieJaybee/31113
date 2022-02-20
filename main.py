@@ -18,6 +18,9 @@ bot = lightbulb.BotApp(token=TOKEN,
 @lightbulb.implements(lightbulb.PrefixCommand)
 async def search(ctx: lightbulb.Context):
 	g = google_utils.Google.search(ctx.options.query, is_safe=(not ctx.get_channel().is_nsfw))
-	await ctx.respond(g[0].link)
+	try:
+		await ctx.respond(g[0].link)
+	except IndexError:
+		await ctx.respond("uguu sowwy owo can't find it uvu")
 
 bot.run()
