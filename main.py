@@ -29,7 +29,7 @@ async def on_ready():
 @bot.command(name="search")
 async def search(ctx, *, query: str):
 	soup = await request(params={'q':query, 'safe':"off" if ctx.channel.is_nsfw() else "strict"})
-	soup = soup.find_all("div", class_="kCrYT")
+	soup = soup.find_all("div", class_="egMi0 kCrYT")
 	for i in soup:
 		if i.a is not None and i.a['href'].startswith("/url") and not 'scholar.google' in i.a['href']:
 			return await ctx.send(urllib.parse.unquote(i.a['href']).split('?q=')[1].split('&sa=')[0])
