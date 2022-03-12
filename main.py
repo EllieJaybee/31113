@@ -1,26 +1,38 @@
-import lightbulb
-import google_utils
+import discord
+from discord.ext import commands
+
+import aiohttp
+from bs4 import BeautifulSoup as bs
+import urllib
 
 from secret import TOKEN
 
-bot = lightbulb.BotApp(token=TOKEN,
-						prefix="ok google,",
-						help_class=None,
-						case_insensitive_prefix_commands=True)
+bot = commands.Bot(command_prefix="ok google, ",
+					help_command=None,
+					allowed_mentions=None,
+					case_insensitive=True,
+					intents=discord.Intents.all())
 
-@bot.command
-@lightbulb.option("query",
-					description="what you wanna search",
-					type=str,
-					required=True,
-					modifier=lightbulb.OptionModifier.CONSUME_REST)
-@lightbulb.command("search", "Returns google results")
-@lightbulb.implements(lightbulb.PrefixCommand)
-async def search(ctx: lightbulb.Context):
-	g = google_utils.Google.search(ctx.options.query, is_safe=(not ctx.get_channel().is_nsfw))
-	try:
-		await ctx.respond(g[0].link)
-	except IndexError:
-		await ctx.respond("uguu sowwy owo can't find it uvu")
+async def request(params: dict = None):
+		url = "https://www.google.com/search"
+		async with aiohttp.ClientSession() as sess:
+			async with sess.get(url,
+								headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'},
+								params=params) as req:
+				resp = await req.text()
+		return bs(resp, 'html.parser')
 
-bot.run()
+@bot.event
+async def on_ready():
+	print("ready!")
+
+@bot.command(name="search")
+async def search(ctx, *, query: str):
+	soup = await request(params={'q':query, 'safe':"off" if ctx.channel.is_nsfw() else "strict"})
+	soup = soup.find_all("div", class_="kCrYT")
+	for i in soup:
+		if i.a is not None and i.a['href'].startswith("/url") and not 'scholar.google' in i.a['href']:
+			return await ctx.send(urllib.parse.unquote(i.a['href']).split('?q=')[1].split('&sa=')[0])
+	await ctx.send(content="uguu sowwy owo can't find it uvu")
+
+bot.run(TOKEN)
