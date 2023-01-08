@@ -6,10 +6,10 @@ import urllib
 
 from secret import TOKEN
 
-bot = crescent.Bot(TOKEN)
+bot = crescent.Bot(TOKEN, intents=crescent.Intents.ALL)
 
 @bot.include
-@crescent.command
+@crescent.command(description="Check connection to server")
 async def ping(ctx: crescent.Context):
 	await ctx.respond("pong")
 	if ctx.channel.is_nsfw:
@@ -25,7 +25,7 @@ async def request(params: dict = None):
 		return bs(resp, 'html.parser')
 
 @bot.include
-@crescent.command
+@crescent.command(description="Fetches the first google search result")
 async def search(ctx: crescent.Context, *, query: atd[str, "Query to be searched"]):
 	soup = await request(params={'q':query, 'safe':"off" if ctx.channel.is_nsfw else "strict"})
 	soup = soup.find_all("div", class_="egMi0 kCrYT")
