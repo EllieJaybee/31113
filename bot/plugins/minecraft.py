@@ -1,6 +1,8 @@
 import crescent
 from difflib import get_close_matches as correct
 import hikari
+import aiohttp
+from bs4 import BeautifulSoup as bs
 from pyjsparser import parse
 import requests
 from typing_extensions import Annotated as atd
@@ -42,3 +44,19 @@ async def recipe(
     query: atd[str, "Recipe to search", crescent.Autocomplete(recipe_autocomplete)]):
     url = await rec(query)
     await ctx.respond(url)
+
+@plugin.include
+@crescent.command(description="Fetches status of redwell's server")
+async def mcserver(ctx: crescent.Context):
+    async with aiohttp.ClientSession() as sess:
+        async with sess.get("https://llewder.lol") as req:
+            resp = await req.text()
+            soup = bs(resp, 'html.parser')
+            root = soup.find_all('p')[1]
+            br = root.find_all('br')
+            status = root.span.text.strip()
+            version = br[1].next_element.text.strip()
+            players = br[-1].next_element.text.strip()
+            msg = [status, version, players]
+            res = '\n'.join(msg)
+            await ctx.respond(res)
