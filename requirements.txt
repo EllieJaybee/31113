@@ -1,0 +1,5 @@
+beautifulsoup4
+hikari-crescent
+requests
+pyjsparser
+typing_extensions
