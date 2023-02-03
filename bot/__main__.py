@@ -1,6 +1,8 @@
 import crescent
+import hikari
 from bot.secret import TOKEN
 
-bot = crescent.Bot(TOKEN, intents=crescent.Intents.ALL, banner=None)
+client = hikari.GatewayBot(TOKEN)
+bot = crescent.Client(client)
 bot.plugins.load_folder("bot.plugins")
-bot.run()
+client.run()
