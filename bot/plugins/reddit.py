@@ -23,38 +23,35 @@ async def gallery(ctx: crescent.Context, gallery_data: dict):
         _format = p['m'].split("/")[-1]
         await ctx.respond(f"https://i.reddit.com/{_id}.{_format}")
 
-@plugin.include
-@crescent.command(description="Fetches a random hot reddit femboy post")
-async def femboy(ctx: crescent.Context):
+async def reddit(ctx: crescent.Context, subreddit: str, offset: int):
     if not ctx.channel.is_nsfw:
         return await ctx.respond("horny 🫵", ephemeral=True)
-    d = await request(ctx, "r/Femboys/hot.json")
-    postlist = d['data']['children'][1:]
+    d = await request(ctx, f"r/{subreddit}/hot.json")
+    postlist = d['data']['children'][offset:]
     post = random.choice(postlist)
     if "reddit.com/gallery/" in post['data']['url_overridden_by_dest']:
         return await gallery(ctx, post)
     await ctx.respond(post['data']['url_overridden_by_dest'])
+
+@plugin.include
+@crescent.command(name="reddit", description="Fetches hot reddit stuff")
+async def _reddit(ctx: crescent.Context, subreddit: atd[str, "subreddit you wanna fetch"]):
+    try:
+        await reddit(ctx, subreddit, 0)
+    except KeyError:
+        await ctx.respond("The post queried is not a media post")
+
+@plugin.include
+@crescent.command(description="Fetches a random hot reddit femboy post")
+async def femboy(ctx: crescent.Context):
+    await reddit(ctx, "Femboys", 1)
 
 @plugin.include
 @crescent.command(description="Fetches a random hot reddit trap hentai post")
 async def trap(ctx: crescent.Context):
-    if not ctx.channel.is_nsfw:
-        return await ctx.respond("horny 🫵", ephemeral=True)
-    d = await request(ctx, "r/traphentai/hot.json")
-    postlist = d['data']['children'][2:]
-    post = random.choice(postlist)
-    if "reddit.com/gallery/" in post['data']['url_overridden_by_dest']:
-        return await gallery(ctx, post)
-    await ctx.respond(post['data']['url_overridden_by_dest'])
+    await reddit(ctx, "traphentai", 2)
 
 @plugin.include
 @crescent.command(description="Fetches a random hot reddit hentai post")
 async def hentai(ctx: crescent.Context):
-    if not ctx.channel.is_nsfw:
-        return await ctx.respond("horny 🫵", ephemeral=True)
-    d = await request(ctx, "r/hentai/hot.json")
-    postlist = d['data']['children']
-    post = random.choice(postlist)
-    if "reddit.com/gallery/" in post['data']['url_overridden_by_dest']:
-        return await gallery(ctx, post)
-    await ctx.respond(post['data']['url_overridden_by_dest'])
+    await reddit(ctx, "hentai", 0)
