@@ -18,12 +18,10 @@ async def request(ctx: crescent.Context, gateway: str, params: dict = None):
         return json.loads(resp)
 
 async def gallery(ctx: crescent.Context, gallery_data: dict):
-    total = list()
     for p in gallery_data['media_metadata']:
         _id = p['id']
         _format = p['m'].split("/")[-1]
-        total.append(f"https://i.reddit.com/{_id}.{_format}")
-    await ctx.respond('\n'.join(total))
+        await ctx.respond(f"https://i.reddit.com/{_id}.{_format}")
 
 @plugin.include
 @crescent.command(description="Fetches a random hot reddit femboy post")
