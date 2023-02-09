@@ -6,12 +6,15 @@ import json
 import random
 
 plugin = crescent.Plugin()
+subsort = ["hot", "new", "rising", "top"]
+timelist = ["hour", "day", "week", "month", "year", "all"]
 
-async def request(ctx: crescent.Context, gateway: str, params: dict = None):
-    url = "https://reddit.com/"
+async def request(ctx: crescent.Context, endpoint: str):
     await ctx.defer()
+    url = "https://reddit.com/"+endpoint
+    params = {"t": random.choice(timelist)} if "/top.json" in endpoint else None
     async with aiohttp.ClientSession() as sess:
-        async with sess.get(f"{url}{gateway}",
+        async with sess.get(url,
                             headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'},
                             params=params) as req:
             resp = await req.text()
@@ -26,20 +29,20 @@ async def gallery(ctx: crescent.Context, gallery_data: dict):
 async def reddit(ctx: crescent.Context, subreddit: str, offset: int):
     if not ctx.channel.is_nsfw:
         return await ctx.respond("horny 🫵", ephemeral=True)
-    d = await request(ctx, f"r/{subreddit}/hot.json")
+    d = await request(ctx, f"r/{subreddit}/{random.choice(subsort)}.json")
     postlist = d['data']['children'][offset:]
     post = random.choice(postlist)
-    if "reddit.com/gallery/" in post['data']['url_overridden_by_dest']:
-        return await gallery(ctx, post)
-    await ctx.respond(post['data']['url_overridden_by_dest'])
+    try:
+        if "reddit.com/gallery/" in post['data']['url_overridden_by_dest']:
+            return await gallery(ctx, post)
+        await ctx.respond(post['data']['url_overridden_by_dest'])
+    except KeyError:
+            await ctx.respond("The post queried is not a media post")
 
 @plugin.include
 @crescent.command(name="reddit", description="Fetches hot reddit stuff")
 async def _reddit(ctx: crescent.Context, subreddit: atd[str, "subreddit you wanna fetch"]):
-    try:
-        await reddit(ctx, subreddit, 0)
-    except KeyError:
-        await ctx.respond("The post queried is not a media post")
+    await reddit(ctx, subreddit, 0)
 
 @plugin.include
 @crescent.command(description="Fetches a random hot reddit femboy post")
