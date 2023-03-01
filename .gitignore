@@ -128,5 +128,9 @@ dmypy.json
 # Pyre type checker
 .pyre/
 
+# Vscode stuff
+.vscode/
+
+# secrets and tests
 *secret*
 *test*
