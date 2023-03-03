@@ -16,7 +16,6 @@ def load():
     miru.install(plugin.app)
 
 async def request(ctx: crescent.Context, endpoint: str):
-    await ctx.defer()
     url = "https://reddit.com/"+endpoint
     params = {"t": random.choice(timelist)} if "/top.json" in endpoint else None
     async with aiohttp.ClientSession() as sess:
@@ -40,20 +39,23 @@ class MoreButton(miru.Button):
         self.offset = reddict[sub] if sub in reddict else 0
 
     async def callback(self, ctx: miru.ViewContext):
+        await ctx.edit_response(components=None)
         await MoreButton.reddit(ctx, self.sub, self.offset, False)
         self.view.stop()
 
     @classmethod
     async def reddit(self, ctx: crescent.Context, subreddit: str, offset: int, _new: bool = True):
-        if _new and not ctx.channel.is_nsfw:
-            return await ctx.respond("horny 🫵", flags=hikari.MessageFlag.EPHEMERAL)
+        if _new:
+            await ctx.defer()
+            if not ctx.channel.is_nsfw:
+                return await ctx.respond("horny 🫵", flags=hikari.MessageFlag.EPHEMERAL)
         d = await request(ctx, f"r/{subreddit}/{random.choice(subsort)}.json")
         postlist = d['data']['children'][offset:]
         post = random.choice(postlist)
         try:
             if "reddit.com/gallery/" in post['data']['url_overridden_by_dest']:
                 return await gallery(ctx, post)
-            view = miru.View()
+            view = miru.View(timeout=None)
             view.add_item(MoreButton(subreddit))
             mes = await ctx.respond(post['data']['url_overridden_by_dest'], components=view)
             await view.start(mes)
