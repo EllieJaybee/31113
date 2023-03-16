@@ -20,3 +20,23 @@ async def event(ctx: crescent.Context):
     else:
         await ctx.member.remove_role(1085808035831746570)
         await ctx.respond("✂️ Removed role `Event`")
+
+@plugin.include
+@crescent.hook(is_member)
+@crescent.command(description="Change role icon")
+async def roleicon(ctx: crescent.Context, icon: atd[hikari.Attachment, "Icon to be applied to role"]):
+    for role in ctx.member.get_roles():
+        if role.colour != hikari.Colour.from_int(0):
+            await plugin.app.rest.edit_role(ctx.guild, role, icon=icon)
+            return await ctx.respond("🍆 Changed role icon!")
+    await ctx.respond("🤨 Can't find custom role")
+
+@plugin.include
+@crescent.hook(is_member)
+@crescent.command(name="roleicon-clear", description="Clear role icon")
+async def roleiconclear(ctx: crescent.Context):
+    for role in ctx.member.get_roles():
+        if role.colour != hikari.Colour.from_int(0):
+            await plugin.app.rest.edit_role(ctx.guild, role, icon=None)
+            return await ctx.respond("✂️ Cleared role icon!")
+    await ctx.respond("🤨 Can't find custom role")
