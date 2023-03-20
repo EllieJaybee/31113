@@ -11,10 +11,6 @@ plugin = crescent.Plugin()
 subsort = ["hot", "new", "rising", "top"]
 timelist = ["hour", "day", "week", "month", "year", "all"]
 
-@plugin.load_hook
-def load():
-    miru.install(plugin.app)
-
 async def request(ctx: crescent.Context, endpoint: str):
     url = "https://reddit.com/"+endpoint
     params = {"t": random.choice(timelist)} if "/top.json" in endpoint else None
