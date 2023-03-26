@@ -15,4 +15,4 @@ async def is_femboy(ctx: crescent.Context):
 @crescent.command(description="Grant Member role")
 async def member(ctx: crescent.Context, memb: atd[hikari.User, "Person to be a member"]):
     await memb.add_role(938700639771439157)
-    await ctx.respond(f"Given {memb.display_name} Member", mentions_everyone=False, role_mentions=False, user_mentions=False)
+    await ctx.respond(f"🍆 Given {memb.display_name} Member", mentions_everyone=False, role_mentions=False, user_mentions=False)
