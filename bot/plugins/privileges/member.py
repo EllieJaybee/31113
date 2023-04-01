@@ -12,17 +12,6 @@ async def is_member(ctx: crescent.Context):
 
 @plugin.include
 @crescent.hook(is_member)
-@crescent.command(description="Get the event role")
-async def event(ctx: crescent.Context):
-    if 1085808035831746570 not in ctx.member.role_ids:
-        await ctx.member.add_role(1085808035831746570)
-        await ctx.respond("🍆 Added role `Event`")
-    else:
-        await ctx.member.remove_role(1085808035831746570)
-        await ctx.respond("✂️ Removed role `Event`")
-
-@plugin.include
-@crescent.hook(is_member)
 @crescent.command(description="Change role icon")
 async def roleicon(ctx: crescent.Context, icon: atd[hikari.Attachment, "Icon to be applied to role"]):
     for role in ctx.member.get_roles():
