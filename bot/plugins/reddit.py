@@ -8,31 +8,31 @@ import json
 import random
 
 plugin = crescent.Plugin()
-subsort = ["hot", "new", "rising", "top"]
-timelist = ["hour", "day", "week", "month", "year", "all"]
+subreddit_sort = ["hot", "new", "rising", "top"]
+time_list = ["hour", "day", "week", "month", "year", "all"]
 
 async def request(ctx: crescent.Context, endpoint: str):
     url = "https://reddit.com/"+endpoint
-    params = {"t": random.choice(timelist)} if "/top.json" in endpoint else None
+    params = {"t": random.choice(time_list)} if "/top.json" in endpoint else None
     async with aiohttp.ClientSession() as sess:
         async with sess.get(url,
                             headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'},
-                            params=params) as req:
-            resp = await req.text()
-        return json.loads(resp)
+                            params=params) as response:
+            response_text = await response.text()
+        return json.loads(response_text)
 
 async def gallery(ctx: crescent.Context, gallery_data: dict):
-    for p in gallery_data['media_metadata']:
-        _id = p['id']
-        _format = p['m'].split("/")[-1]
-        await ctx.respond(f"https://i.reddit.com/{_id}.{_format}")
+    for post in gallery_data['media_metadata']:
+        id_ = post['id']
+        format_ = post['m'].split("/")[-1]
+        await ctx.respond(f"https://i.reddit.com/{id_}.{format_}")
 
 class MoreButton(miru.Button):
-    def __init__(self, sub: str):
+    def __init__(self, subreddit: str):
         super().__init__(style=hikari.ButtonStyle.SUCCESS, label="More🔄️")
-        self.sub = sub
+        self.sub = subreddit
         reddict = {"Femboys": 1, "traphentai": 2, "hentai": 3}
-        self.offset = reddict[sub] if sub in reddict else 0
+        self.offset = reddict[subreddit] if subreddit in reddict else 0
 
     async def callback(self, ctx: miru.ViewContext):
         await ctx.edit_response(components=None)
@@ -40,28 +40,28 @@ class MoreButton(miru.Button):
         self.view.stop()
 
     @classmethod
-    async def reddit(self, ctx: crescent.Context, subreddit: str, offset: int, _new: bool = True):
-        if _new:
+    async def reddit(cls, ctx: crescent.Context, subreddit: str, offset: int, new_: bool = True):
+        if new_:
             await ctx.defer()
             if not ctx.channel.is_nsfw:
                 return await ctx.respond("horny 🫵", flags=hikari.MessageFlag.EPHEMERAL)
-        d = await request(ctx, f"r/{subreddit}/{random.choice(subsort)}.json")
-        postlist = d['data']['children'][offset:]
+        data = await request(ctx, f"r/{subreddit}/{random.choice(subreddit_sort)}.json")
+        postlist = data['data']['children'][offset:]
         post = random.choice(postlist)
         try:
             if "reddit.com/gallery/" in post['data']['url_overridden_by_dest']:
                 return await gallery(ctx, post)
             view = miru.View(timeout=None)
             view.add_item(MoreButton(subreddit))
-            mes = await ctx.respond(post['data']['url_overridden_by_dest'], components=view)
-            await view.start(mes)
+            message = await ctx.respond(post['data']['url_overridden_by_dest'], components=view)
+            await view.start(message)
             await view.wait()
         except KeyError:
             await ctx.respond("The post queried is not a media post")
 
 @plugin.include
 @crescent.command(name="reddit", description="Fetches hot reddit stuff")
-async def _reddit(ctx: crescent.Context, subreddit: atd[str, "subreddit you wanna fetch"]):
+async def reddit_(ctx: crescent.Context, subreddit: atd[str, "subreddit you wanna fetch"]):
     await MoreButton.reddit(ctx, subreddit, 0)
 
 @plugin.include

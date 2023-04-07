@@ -6,8 +6,8 @@ plugin = crescent.Plugin()
 @plugin.include
 @crescent.command(description="Check connection to server")
 async def ping(ctx: crescent.Context):
-	lat = round(plugin.app.heartbeat_latency, 5) * 100
-	await ctx.respond(f"{lat}ms")
+	latency = round(plugin.app.heartbeat_latency, 5) * 100
+	await ctx.respond(f"{latency}ms")
 	if ctx.channel.is_nsfw:
 		await ctx.respond("also this channel sus")
 

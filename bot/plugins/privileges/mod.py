@@ -13,7 +13,7 @@ async def is_mod(ctx: crescent.Context):
 @plugin.include
 @crescent.hook(is_mod)
 @crescent.command(name="1984", description="Assert Dominance")
-async def _1984(ctx: crescent.Context, member: atd[hikari.User, "Member to silence"]):
+async def mute_1984(ctx: crescent.Context, member: atd[hikari.User, "Member to silence"]):
     await member.edit(
         mute=True,
         deaf=True,

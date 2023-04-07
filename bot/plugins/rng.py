@@ -11,7 +11,6 @@ async def rng(ctx: crescent.Context, min: atd[int, "Lowest number"], max: atd[in
 
 @plugin.include
 @crescent.command(description="Pick randomly from a list of choices")
-async def pick(ctx: crescent.Context, choice1: str, choice2: str = None, choice3: str = None, choice4: str = None, choice5: str = None):
-    res = [choice1, choice2, choice3, choice4, choice5]
-    choices = [i for i in res if i is not None]
-    await ctx.respond(random.choice(choices))
+async def pick(ctx: crescent.Context, choices: atd[str, "Choices separated by commas"]):
+    choice_list = choices.split(",")
+    await ctx.respond(random.choice(choice_list))

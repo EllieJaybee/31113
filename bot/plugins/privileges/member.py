@@ -23,7 +23,7 @@ async def roleicon(ctx: crescent.Context, icon: atd[hikari.Attachment, "Icon to 
 @plugin.include
 @crescent.hook(is_member)
 @crescent.command(name="roleicon-clear", description="Clear role icon")
-async def roleiconclear(ctx: crescent.Context):
+async def roleicon_clear(ctx: crescent.Context):
     for role in ctx.member.get_roles():
         if role.colour != hikari.Colour.from_int(0):
             await plugin.app.rest.edit_role(ctx.guild, role, icon=None)
