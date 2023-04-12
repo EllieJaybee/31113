@@ -10,9 +10,20 @@ async def is_femboy(ctx: crescent.Context):
         return crescent.HookResult(exit=True)
     return crescent.HookResult()
 
-@plugin.include
-@crescent.hook(is_femboy)
-@crescent.command(description="Grant Member role")
-async def member(ctx: crescent.Context, member: atd[hikari.User, "Person to be a member"]):
+async def give_member(ctx: crescent.Context, member: hikari.Member):
+    if 938700639771439157 in member.role_ids:
+        return await ctx.respond(f"💀 {member.display_name} already has Member")
     await member.add_role(938700639771439157)
     await ctx.respond(f"🍆 Given {member.display_name} Member", mentions_everyone=False, role_mentions=False, user_mentions=False)
+
+@plugin.include
+@crescent.hook(is_femboy)
+@crescent.command(name="member" ,description="Grant Member role")
+async def member_slash(ctx: crescent.Context, member: atd[hikari.User, "Person to be a member"]):
+    await give_member(ctx, member)
+
+@plugin.include
+@crescent.hook(is_femboy)
+@crescent.message_command(name="Grant Member role")
+async def member_message(ctx: crescent.Context, message: hikari.Message):
+    await give_member(ctx, message.member)
