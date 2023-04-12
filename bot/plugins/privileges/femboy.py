@@ -26,4 +26,4 @@ async def member_slash(ctx: crescent.Context, member: atd[hikari.User, "Person t
 @crescent.hook(is_femboy)
 @crescent.message_command(name="Grant Member role")
 async def member_message(ctx: crescent.Context, message: hikari.Message):
-    await give_member(ctx, message.member)
+    await give_member(ctx, message.author)
