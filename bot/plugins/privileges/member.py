@@ -12,7 +12,7 @@ async def is_member(ctx: crescent.Context):
 
 @plugin.include
 @crescent.hook(is_member)
-@crescent.command(description="Change role icon")
+@crescent.command(description="Change role icon", guild=938699961112096768)
 async def roleicon(ctx: crescent.Context, icon: atd[hikari.Attachment, "Icon to be applied to role"]):
     for role in ctx.member.get_roles():
         if role.colour != hikari.Colour.from_int(0):
@@ -22,7 +22,7 @@ async def roleicon(ctx: crescent.Context, icon: atd[hikari.Attachment, "Icon to 
 
 @plugin.include
 @crescent.hook(is_member)
-@crescent.command(name="roleicon-clear", description="Clear role icon")
+@crescent.command(name="roleicon-clear", description="Clear role icon", guild=938699961112096768)
 async def roleicon_clear(ctx: crescent.Context):
     for role in ctx.member.get_roles():
         if role.colour != hikari.Colour.from_int(0):

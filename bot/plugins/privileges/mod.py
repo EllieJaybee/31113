@@ -12,7 +12,7 @@ async def is_mod(ctx: crescent.Context):
 
 @plugin.include
 @crescent.hook(is_mod)
-@crescent.command(name="1984", description="Assert Dominance")
+@crescent.command(name="1984", description="Assert Dominance", guild=938699961112096768)
 async def mute_1984(ctx: crescent.Context, member: atd[hikari.User, "Member to silence"]):
     await member.edit(
         mute=True,
@@ -25,7 +25,7 @@ async def mute_1984(ctx: crescent.Context, member: atd[hikari.User, "Member to s
 
 @plugin.include
 @crescent.hook(is_mod)
-@crescent.command(description="Release prisoner")
+@crescent.command(description="Release prisoner", guild=938699961112096768)
 async def free(ctx: crescent.Context, member: atd[hikari.User, "Prisoner to free"]):
     if 939351651217735760 not in member.role_ids:
         return await ctx.respond("He's not gulaged", ephemeral=True)
