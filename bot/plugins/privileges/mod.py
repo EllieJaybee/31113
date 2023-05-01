@@ -21,6 +21,8 @@ async def mute_1984(ctx: crescent.Context, member: atd[hikari.User, "Member to s
     )
     await member.add_role(939351651217735760)
     await member.remove_role(938700639771439157)
+    await member.remove_role(965287802935853127)
+    await member.remove_role(939494839077204018)
     await ctx.respond(f"✅ Locked {member.display_name} up", ephemeral=True)
 
 @plugin.include
@@ -34,5 +36,4 @@ async def free(ctx: crescent.Context, member: atd[hikari.User, "Prisoner to free
         deaf=False
     )
     await member.remove_role(939351651217735760)
-    await member.add_role()
-    await ctx.respond(f"✅ Freed {member.display_name}", ephemeral=True)
+    await ctx.respond(f"✅ Freed {member.display_name} (Member, Big boy and Femboy role needs to be manually given)", ephemeral=True)
