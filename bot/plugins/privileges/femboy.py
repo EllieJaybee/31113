@@ -17,9 +17,3 @@ async def give_member(ctx: crescent.Context, member: hikari.Member):
 @crescent.command(name="member" ,description="Grant Member role", guild=938699961112096768)
 async def member_slash(ctx: crescent.Context, member: atd[hikari.User, "Person to be a member"]):
     await give_member(ctx, member)
-
-# @plugin.include
-# @crescent.hook(is_femboy)
-# @crescent.message_command(name="Grant Member role")
-# async def member_message(ctx: crescent.Context, message: hikari.Message):
-#     await give_member(ctx, message.member)
