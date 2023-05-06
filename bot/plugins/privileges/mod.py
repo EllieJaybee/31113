@@ -2,13 +2,9 @@ import crescent
 import hikari
 from typing_extensions import Annotated as atd
 
-plugin = crescent.Plugin()
+from bot.privilege import is_mod
 
-async def is_mod(ctx: crescent.Context):
-    if 939220579133845516 not in ctx.member.role_ids and ctx.member.id != 845942758421823488:
-        await ctx.respond("You have no such permission")
-        return crescent.HookResult(exit=True)
-    return crescent.HookResult()
+plugin = crescent.Plugin()
 
 @plugin.include
 @crescent.hook(is_mod)
