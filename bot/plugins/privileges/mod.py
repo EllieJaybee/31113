@@ -12,8 +12,7 @@ plugin = crescent.Plugin()
 async def mute_1984(ctx: crescent.Context, member: atd[hikari.User, "Member to silence"]):
     await member.edit(
         mute=True,
-        deaf=True,
-        voice_channel= None if not None else hikari.undefined.UndefinedOr
+        deaf=True
     )
     await member.add_role(939351651217735760)
     await member.remove_role(938700639771439157)
