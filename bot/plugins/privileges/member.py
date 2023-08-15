@@ -25,3 +25,11 @@ async def roleicon_clear(ctx: crescent.Context):
             await plugin.app.rest.edit_role(ctx.guild, role, icon=None)
             return await ctx.respond("✂️ Cleared role icon!")
     await ctx.respond("🤨 Can't find custom role")
+
+@plugin.include
+@crescent.hook(is_member)
+@crescent.message_command(name="Report Message", guild=938699961112096768)
+async def report_message(ctx: crescent.Context, message: hikari.Message):
+    await ctx.respond(content="Report received", ephemeral=True)
+    report_channel: hikari.GuildTextChannel = ctx.guild.get_channel(1140965929824567377)
+    await report_channel.send(content=f"{ctx.member.mention} reported this message by {message.author.mention} {message.make_link(ctx.guild)}")
