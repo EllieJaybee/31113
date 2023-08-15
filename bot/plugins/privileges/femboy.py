@@ -11,7 +11,7 @@ async def give_member(ctx: crescent.Context, member: hikari.Member):
         return await ctx.respond(f"💀 {member.display_name} already has Member", mentions_everyone=False, role_mentions=False, user_mentions=False)
     await member.add_role(938700639771439157)
     await ctx.respond(f"🍆 Given {member.display_name} Member", mentions_everyone=False, role_mentions=False, user_mentions=False)
-    log_channel: hikari.TextableChannel = await ctx.guild.get_channel(939418125894553611)
+    log_channel: hikari.TextableChannel = ctx.guild.get_channel(939418125894553611)
     await log_channel.send(content=f"{ctx.member.mention} verified {member.mention} in {ctx.channel.mention}")
 
 @plugin.include
