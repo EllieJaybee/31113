@@ -46,10 +46,10 @@ async def recipe(
     await ctx.respond(url)
 
 @plugin.include
-@crescent.command(description="Fetches status of redwell's server")
-async def mcserver(ctx: crescent.Context):
+@crescent.command(description="Fetches status of a minecraft server")
+async def mcserver(ctx: crescent.Context, ip: atd[str, "IP address of the minecraft server"]):
     async with aiohttp.ClientSession() as sess:
-        async with sess.get("https://llewder.lol") as req:
+        async with sess.get(ip) as req:
             resp = await req.text()
     soup = bs(resp, 'html.parser')
     root = soup.find_all('p')[1]
