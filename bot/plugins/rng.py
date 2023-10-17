@@ -14,3 +14,8 @@ async def rng(ctx: crescent.Context, min: atd[int, "Lowest number"], max: atd[in
 async def pick(ctx: crescent.Context, choices: atd[str, "Choices separated by commas"]):
     choice_list = choices.split(",")
     await ctx.respond(random.choice(choice_list), mentions_everyone=False, role_mentions=False, user_mentions=False)
+
+@plugin.include
+@crescent.command(description="Pick a random member")
+async def pick_member(ctx: crescent.Context):
+      await ctx.respond(random.choice(ctx.guild.get_members()), mentions_everyone=False, role_mentions=False, user_mentions=False)
