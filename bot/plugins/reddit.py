@@ -62,7 +62,7 @@ class MoreButton(miru.Button):
             #    return await gallery(ctx, post)
             view = miru.View(timeout=None)
             view.add_item(MoreButton(subreddit))
-            message = await ctx.respond(vars(post), components=view)
+            message = await ctx.respond(str(vars(post))[:500], components=view)
             await view.start(message)
             await view.wait()
         except KeyError:
