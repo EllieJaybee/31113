@@ -3,13 +3,23 @@ import hikari
 import miru
 from typing_extensions import Annotated as atd
 
+import asyncpraw
+from asyncpraw.models import Subreddit
 import aiohttp
 import json
 import random
 
+from bot.secret import REDID, REDSECRET
+
 plugin = crescent.Plugin()
 subreddit_sort = ["hot", "new", "rising", "top"]
 time_list = ["hour", "day", "week", "month", "year", "all"]
+
+preddit = asyncpraw.Reddit(
+    client_id=REDID,
+    client_secret=REDSECRET,
+    user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+)
 
 async def request(ctx: crescent.Context, endpoint: str):
     url = "https://reddit.com/"+endpoint
@@ -45,15 +55,14 @@ class MoreButton(miru.Button):
             await ctx.defer()
             if not ctx.channel.is_nsfw:
                 return await ctx.respond("horny 🫵", flags=hikari.MessageFlag.EPHEMERAL)
-        data = await request(ctx, f"r/{subreddit}/{random.choice(subreddit_sort)}.json")
-        postlist = data['data']['children'][offset:]
-        post = random.choice(postlist)
+        sub: Subreddit = await preddit.subreddit(subreddit)
+        post = sub.random()
         try:
-            if "reddit.com/gallery/" in post['data']['url_overridden_by_dest']:
-                return await gallery(ctx, post)
+            #if "reddit.com/gallery/" in post['data']['url_overridden_by_dest']:
+            #    return await gallery(ctx, post)
             view = miru.View(timeout=None)
             view.add_item(MoreButton(subreddit))
-            message = await ctx.respond(post['data']['url_overridden_by_dest'], components=view)
+            message = await ctx.respond(vars(post), components=view)
             await view.start(message)
             await view.wait()
         except KeyError:

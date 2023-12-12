@@ -1,5 +1,6 @@
 beautifulsoup4
 hikari-crescent
+asyncpraw
 pydub
 pyjsparser
 pysaucenao
