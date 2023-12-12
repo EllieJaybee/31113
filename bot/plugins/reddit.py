@@ -16,6 +16,7 @@ async def request(ctx: crescent.Context, endpoint: str):
                             headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'},
                             params=params) as response:
             response_text = await response.text()
+        print(response_text)
         return json.loads(response_text)
 
 async def gallery(ctx: crescent.Context, gallery_data: dict):
