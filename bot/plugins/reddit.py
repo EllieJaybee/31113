@@ -4,13 +4,13 @@ import miru
 from typing_extensions import Annotated as atd
 
 import asyncpraw
-from asyncpraw.models import Subreddit
+from asyncpraw.models import Subreddit, Submission
 
 from bot.secret import REDID, REDSECRET
 
 plugin = crescent.Plugin()
 
-async def gallery(ctx: crescent.Context, gallery_data: dict):
+async def gallery(ctx: crescent.Context, gallery_data: Submission):
     for img in gallery_data.media_metadata:
         id_ = img.id
         format_ = img.m.split("/")[-1]
@@ -41,7 +41,7 @@ class MoreButton(miru.Button):
         post = await sub.random()
         try:
             if "reddit.com/gallery/" in post.url_overridden_by_dest:
-                return await gallery(ctx, post)
+                return await ctx.respond("Gallery posts are not supported yet. Please try again. 😖")
             view = miru.View(timeout=None)
             view.add_item(MoreButton(subreddit))
             message = await ctx.respond(post.url_overridden_by_dest, components=view)
