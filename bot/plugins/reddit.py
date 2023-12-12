@@ -30,14 +30,14 @@ class MoreButton(miru.Button):
     async def reddit(cls, ctx: crescent.Context, subreddit: str, new_: bool = True):
         if new_:
             await ctx.defer()
-            preddit = asyncpraw.Reddit(
+            cls.preddit = asyncpraw.Reddit(
             client_id=REDID,
             client_secret=REDSECRET,
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
             )
             if not ctx.channel.is_nsfw:
                 return await ctx.respond("horny 🫵", flags=hikari.MessageFlag.EPHEMERAL)
-        sub: Subreddit = await preddit.subreddit(subreddit)
+        sub: Subreddit = await cls.preddit.subreddit(subreddit)
         post = await sub.random()
         try:
             if "reddit.com/gallery/" in post.url_overridden_by_dest:
