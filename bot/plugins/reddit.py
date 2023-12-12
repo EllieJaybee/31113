@@ -56,7 +56,7 @@ class MoreButton(miru.Button):
             if not ctx.channel.is_nsfw:
                 return await ctx.respond("horny 🫵", flags=hikari.MessageFlag.EPHEMERAL)
         sub: Subreddit = await preddit.subreddit(subreddit)
-        post = sub.random()
+        post = await sub.random()
         try:
             #if "reddit.com/gallery/" in post['data']['url_overridden_by_dest']:
             #    return await gallery(ctx, post)
