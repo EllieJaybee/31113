@@ -5,15 +5,12 @@ from typing_extensions import Annotated as atd
 
 import aiohttp
 import json
-import random
 
 plugin = crescent.Plugin()
-subreddit_sort = ["hot", "new", "rising", "top"]
-time_list = ["hour", "day", "week", "month", "year", "all"]
 
 async def request(ctx: crescent.Context, endpoint: str):
     url = "https://reddit.com/"+endpoint
-    params = {"t": random.choice(time_list)} if "/top.json" in endpoint else None
+    params = {"raw_json": 1}
     async with aiohttp.ClientSession() as sess:
         async with sess.get(url,
                             headers={'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)'},
@@ -31,23 +28,20 @@ class MoreButton(miru.Button):
     def __init__(self, subreddit: str):
         super().__init__(style=hikari.ButtonStyle.SUCCESS, label="More🔄️")
         self.sub = subreddit
-        reddict = {"Femboys": 1, "traphentai": 2, "hentai": 3}
-        self.offset = reddict[subreddit] if subreddit in reddict else 0
 
     async def callback(self, ctx: miru.ViewContext):
         await ctx.edit_response(components=None)
-        await MoreButton.reddit(ctx, self.sub, self.offset, False)
+        await MoreButton.reddit(ctx, self.sub, False)
         self.view.stop()
 
     @classmethod
-    async def reddit(cls, ctx: crescent.Context, subreddit: str, offset: int, new_: bool = True):
+    async def reddit(cls, ctx: crescent.Context, subreddit: str, new_: bool = True):
         if new_:
             await ctx.defer()
             if not ctx.channel.is_nsfw:
                 return await ctx.respond("horny 🫵", flags=hikari.MessageFlag.EPHEMERAL)
-        data = await request(ctx, f"r/{subreddit}/{random.choice(subreddit_sort)}.json")
-        postlist = data['data']['children'][offset:]
-        post = random.choice(postlist)
+        data = await request(ctx, f"r/{subreddit}/random.json")
+        post= data[0]['data']['children'][0]
         try:
             if "reddit.com/gallery/" in post['data']['url_overridden_by_dest']:
                 return await gallery(ctx, post)
@@ -62,19 +56,19 @@ class MoreButton(miru.Button):
 @plugin.include
 @crescent.command(name="reddit", description="Fetches hot reddit stuff")
 async def reddit_(ctx: crescent.Context, subreddit: atd[str, "subreddit you wanna fetch"]):
-    await MoreButton.reddit(ctx, subreddit, 0)
+    await MoreButton.reddit(ctx, subreddit)
 
 @plugin.include
 @crescent.command(description="Fetches a random hot reddit femboy post")
 async def femboy(ctx: crescent.Context):
-    await MoreButton.reddit(ctx, "Femboys", 1)
+    await MoreButton.reddit(ctx, "Femboys")
 
 @plugin.include
 @crescent.command(description="Fetches a random hot reddit trap hentai post")
 async def trap(ctx: crescent.Context):
-    await MoreButton.reddit(ctx, "traphentai", 2)
+    await MoreButton.reddit(ctx, "traphentai")
 
 @plugin.include
 @crescent.command(description="Fetches a random hot reddit hentai post")
 async def hentai(ctx: crescent.Context):
-    await MoreButton.reddit(ctx, "hentai", 0)
+    await MoreButton.reddit(ctx, "hentai")
