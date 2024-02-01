@@ -27,7 +27,7 @@ class MoreButton(miru.Button):
         self.view.stop()
 
     @classmethod
-    async def reddit(cls, ctx: crescent.Context, subreddit: str, new_: bool = True):
+    async def reddit(cls, ctx: crescent.Context, subreddit: str, new_: bool = True, sfw_: bool = False):
         if new_:
             await ctx.defer()
             cls.preddit = asyncpraw.Reddit(
@@ -35,7 +35,7 @@ class MoreButton(miru.Button):
             client_secret=REDSECRET,
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
             )
-            if not ctx.channel.is_nsfw:
+            if not ctx.channel.is_nsfw and not sfw_:
                 return await ctx.respond("horny 🫵", flags=hikari.MessageFlag.EPHEMERAL)
         sub: Subreddit = await cls.preddit.subreddit(subreddit)
         post = await sub.random()
@@ -69,3 +69,8 @@ async def trap(ctx: crescent.Context):
 @crescent.command(description="Fetches a random hot reddit hentai post")
 async def hentai(ctx: crescent.Context):
     await MoreButton.reddit(ctx, "hentai")
+
+@plugin.include
+@crescent.command(description="Fetches cat pics")
+async def meow(ctx: crescent.Context):
+    await MoreButton.reddit(ctx, "cats")
