@@ -73,4 +73,4 @@ async def hentai(ctx: crescent.Context):
 @plugin.include
 @crescent.command(description="Fetches cat pics")
 async def meow(ctx: crescent.Context):
-    await MoreButton.reddit(ctx, "cats")
+    await MoreButton.reddit(ctx, "cats", sfw_=True)
