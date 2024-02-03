@@ -35,7 +35,7 @@ class MoreButton(miru.Button):
         post = await sub.random()
         view = miru.View(timeout=None)
         view.add_item(MoreButton(subreddit))
-        message = await ctx.respond(f"https://rxddit.com{post.permalink}", components=view)
+        message = await ctx.respond(f"[⠀](https://rxddit.com{post.permalink})", components=view)
         await view.start(message)
         await view.wait()
 
