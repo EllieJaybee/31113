@@ -10,12 +10,6 @@ from bot.secret import REDID, REDSECRET
 
 plugin = crescent.Plugin()
 
-async def gallery(ctx: crescent.Context, gallery_data: Submission):
-    for img in gallery_data.media_metadata:
-        id_ = img.id
-        format_ = img.m.split("/")[-1]
-        await ctx.respond(f"https://i.reddit.com/{id_}.{format_}")
-
 class MoreButton(miru.Button):
     def __init__(self, subreddit: str):
         super().__init__(style=hikari.ButtonStyle.SUCCESS, label="More🔄️")
