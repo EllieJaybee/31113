@@ -39,16 +39,11 @@ class MoreButton(miru.Button):
                 return await ctx.respond("horny 🫵", flags=hikari.MessageFlag.EPHEMERAL)
         sub: Subreddit = await cls.preddit.subreddit(subreddit)
         post = await sub.random()
-        try:
-            if "reddit.com/gallery/" in post.url_overridden_by_dest:
-                return await ctx.respond("Gallery posts are not supported yet. Please try again. 😖")
-            view = miru.View(timeout=None)
-            view.add_item(MoreButton(subreddit))
-            message = await ctx.respond(post.url_overridden_by_dest, components=view)
-            await view.start(message)
-            await view.wait()
-        except KeyError:
-            await ctx.respond("The post queried is not a media post")
+        view = miru.View(timeout=None)
+        view.add_item(MoreButton(subreddit))
+        message = await ctx.respond(post.permalink.replace("reddit", "rxddit"), components=view)
+        await view.start(message)
+        await view.wait()
 
 @plugin.include
 @crescent.command(name="reddit", description="Fetches hot reddit stuff")
