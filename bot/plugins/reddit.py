@@ -13,7 +13,7 @@ plugin = crescent.Plugin()
 class RedditView(miru.View):
 
     async def on_timeout(self):
-        await self.last_context.edit_response(components=None)
+        await self.message.edit(components=None)
 
 class MoreButton(miru.Button):
     def __init__(self, subreddit: str):
