@@ -14,6 +14,7 @@ class RedditView(miru.View):
 
     async def on_timeout(self):
         await self.message.edit(components=None)
+        await MoreButton.preddit.close()
 
 class MoreButton(miru.Button):
     def __init__(self, subreddit: str):
@@ -39,7 +40,7 @@ class MoreButton(miru.Button):
                 await cls.preddit.close()
                 return await ctx.respond("horny 🫵", flags=hikari.MessageFlag.EPHEMERAL)
         post = await sub.random()
-        view = RedditView(timeout=60)
+        view = RedditView(timeout=600)
         view.add_item(MoreButton(subreddit))
         message = await ctx.respond(f"[⠀](https://rxddit.com{post.permalink})", components=view)
         await view.start(message)
