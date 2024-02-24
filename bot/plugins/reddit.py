@@ -29,9 +29,9 @@ class MoreButton(miru.Button):
             client_secret=REDSECRET,
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
             )
-            if not ctx.channel.is_nsfw and not sfw_:
+        sub: Subreddit = await cls.preddit.subreddit(subreddit, fetch=True)
+        if not ctx.channel.is_nsfw and sub.over18:
                 return await ctx.respond("horny 🫵", flags=hikari.MessageFlag.EPHEMERAL)
-        sub: Subreddit = await cls.preddit.subreddit(subreddit)
         post = await sub.random()
         view = miru.View(timeout=None)
         view.add_item(MoreButton(subreddit))
