@@ -10,6 +10,11 @@ from bot.secret import REDID, REDSECRET
 
 plugin = crescent.Plugin()
 
+class RedditView(miru.View):
+
+    async def on_timeout(self):
+        await self.last_context.edit_response(components=None)
+
 class MoreButton(miru.Button):
     def __init__(self, subreddit: str):
         super().__init__(style=hikari.ButtonStyle.SUCCESS, label="More🔄️")
@@ -21,7 +26,7 @@ class MoreButton(miru.Button):
         self.view.stop()
 
     @classmethod
-    async def reddit(cls, ctx: crescent.Context, subreddit: str, new_: bool = True, sfw_: bool = False):
+    async def reddit(cls, ctx: crescent.Context, subreddit: str, new_: bool = True):
         if new_:
             await ctx.defer()
             cls.preddit = asyncpraw.Reddit(
@@ -31,9 +36,10 @@ class MoreButton(miru.Button):
             )
         sub: Subreddit = await cls.preddit.subreddit(subreddit, fetch=True)
         if not ctx.channel.is_nsfw and sub.over18:
+                await cls.preddit.close()
                 return await ctx.respond("horny 🫵", flags=hikari.MessageFlag.EPHEMERAL)
         post = await sub.random()
-        view = miru.View(timeout=None)
+        view = RedditView(timeout=60)
         view.add_item(MoreButton(subreddit))
         message = await ctx.respond(f"[⠀](https://rxddit.com{post.permalink})", components=view)
         await view.start(message)
@@ -62,4 +68,4 @@ async def hentai(ctx: crescent.Context):
 @plugin.include
 @crescent.command(description="Fetches cat pics")
 async def meow(ctx: crescent.Context):
-    await MoreButton.reddit(ctx, "cats", sfw_=True)
+    await MoreButton.reddit(ctx, "cats")
