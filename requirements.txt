@@ -1,6 +1,8 @@
+asyncpraw
 beautifulsoup4
 hikari-crescent
-asyncpraw
+hikari-miru
+mkdocs-material
 pyjsparser
 pysaucenao
 requests

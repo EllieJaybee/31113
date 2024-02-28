@@ -1,0 +1,70 @@
+site_name: 31113 Documentation
+site_url: https://femboy.my
+repo_url: https://github.com/EllieJaybee/31113
+repo_name: EllieJaybee/31113
+copyright: Copyright &copy; 2021-2024 31113 maintainers
+edit_uri: edit/main/docs/
+theme:
+  name: material
+  features:
+    - content.action.edit
+    - content.action.view
+    - content.code.copy
+    - content.tooltips
+    - navigation.footer
+    - navigation.top
+    - navigation.tracking
+  icon:
+    logo: material/tally-mark-3
+    repo: fontawesome/brands/github
+    edit: material/pencil
+    
+    view: material/eye
+    admonition:
+      note: octicons/tag-16
+  palette:
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: light blue
+      toggle:
+        icon: material/weather-sunny
+        name: Switch to dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: black
+      toggle:
+        icon: material/weather-night
+        name: Switch to light mode
+  
+markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+      line_spans: __span
+      pygments_lang_class: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - toc:
+      permalink: 🔗
+  - admonition
+  - attr_list
+  - def_list
+  - md_in_html
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
+
+plugins:
+  - tags
+
+extra:
+  social:
+    - icon: simple/discord
+      link: https://discord.femboy.my
+      name: Main Discord Server
+    - icon: simple/github
+      link: https://github.com/EllieJaybee/31113
+      name: The project on Github
+    - icon: simple/patreon
+      link: https://patreon.com/EllieJB
+      name: Support the project!
