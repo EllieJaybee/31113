@@ -3,6 +3,8 @@ title: Meta Commands
 icon: material/robot-outline
 ---
 
+## Slash Commands
+
 ### [:material-slash-forward-box:][slash]`ping`
 
 :   Returns the bot ping to the server.
