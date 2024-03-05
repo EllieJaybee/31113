@@ -36,7 +36,8 @@ class MoreButton(miru.Button):
             user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
             )
         sub: Subreddit = await cls.preddit.subreddit(subreddit, fetch=True)
-        if not ctx.channel.is_nsfw and sub.over18:
+        if sub.over18:
+            if isinstance(ctx, crescent.Context) and not ctx.channel.is_nsfw:
                 await cls.preddit.close()
                 return await ctx.respond("horny 🫵", flags=hikari.MessageFlag.EPHEMERAL)
         post = await sub.random()
