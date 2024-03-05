@@ -30,5 +30,3 @@ icon: material/robot-outline
     ```
     https://github.com/EllieJaybee/31113
     ```
-
-[slash]: https://support.discord.com/hc/en-us/articles/1500000368501-Slash-Commands-FAQ "Slash Command"

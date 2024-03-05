@@ -35,7 +35,10 @@ theme:
       toggle:
         icon: material/weather-night
         name: Switch to light mode
-  
+
+watch:
+  - "includes"
+
 markdown_extensions:
   - pymdownx.highlight:
       anchor_linenums: true
@@ -44,6 +47,16 @@ markdown_extensions:
   - pymdownx.emoji:
       emoji_index: !!python/name:material.extensions.emoji.twemoji
       emoji_generator: !!python/name:material.extensions.emoji.to_svg
+  - pymdownx.snippets:
+      auto_append:
+        - "includes/abbrs.md"
+      check_paths: true
+      url_download: false
+      url_max_size: 33554432
+      url_timeout: 10
+  - pymdownx.tabbed:
+      alternate_style: true
+      combine_header_slug: true
   - toc:
       permalink: 🔗
   - admonition

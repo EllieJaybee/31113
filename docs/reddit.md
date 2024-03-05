@@ -46,6 +46,3 @@ icon: material/reddit
 ### [:material-slash-forward-box:][slash]`trap` [:material-alert-rhombus-outline:][NSFW]
 
 :   Fetches a random post from r/traphentai.
-
-[NSFW]: https://en.wikipedia.org/wiki/Not_safe_for_work "NSFW"
-[slash]: https://support.discord.com/hc/en-us/articles/1500000368501-Slash-Commands-FAQ "Slash Command"
