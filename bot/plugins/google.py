@@ -88,3 +88,24 @@ async def weather(ctx: crescent.Context, query: atd[str, "Location/time query"])
     response = f"{main_weather} {supplementary_temperature}"
     await ctx.respond(response)
 
+
+@plugin.include
+@crescent.command(description="Fetches the first (lowres) image of the query on google")
+async def image(ctx: crescent.Context, query: atd[str, "Image to search for"]):
+    soup = await request(
+        ctx,
+        params={
+            "q": query,
+            "safe": "off" if ctx.channel.is_nsfw else "strict",
+            "tbm": "isch",
+        },
+    )
+    root = soup.find("div", class_="kCmkOe")
+    link = root.parent["href"]
+    image_link = root.img["src"]
+    embed = hikari.Embed(
+        title="Jump to result!",
+        url=urllib.parse.unquote(link).split("?q=")[1].split("&sa=")[0],
+    )
+    embed.set_image(image_link)
+    await ctx.respond(embed=embed)
