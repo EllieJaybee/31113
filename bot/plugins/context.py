@@ -1,11 +1,11 @@
 import crescent
 import hikari
 from pysaucenao import SauceNao, errors
-from typing_extensions import Annotated as atd
 
 from bot.secret import SAUCETOKEN
 
 plugin = crescent.Plugin()
+
 
 @plugin.include
 @crescent.message_command(name="Find Sauce")
