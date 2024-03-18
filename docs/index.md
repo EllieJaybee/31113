@@ -3,7 +3,7 @@ title: Main Page
 icon: material/book-open-variant-outline
 ---
 
-31113 is a discord but mainly created to serve the [Malaysian Femboys Discord Server](https://discord.femboy.my), but is also capable of handling other servers. This documentation will mostly be showing commands that are relevant to the public.
+31113 is a discord bot mainly created to serve the [Malaysian Femboys Discord Server](https://discord.femboy.my), but is also capable of handling other servers. This documentation will mostly be showing commands that are relevant to the public.
 
 <div class="grid cards" markdown>
 
