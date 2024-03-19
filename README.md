@@ -3,15 +3,14 @@ Main repository for 31113
 
 ## Usage
 1. Create a file named `secret.py` inside the `bot` folder.
-1. Define your discord bot token as `TOKEN`, saucenao api token as `SAUCETOKEN`, reddit data as `REDID`, `REDSECRET`, `REDNAME` and `REDPASS` respectively. Follow [these steps](https://github.com/reddit-archive/reddit/wiki/OAuth2-Quick-Start-Example#first-steps) to obtain the required reddit data.
+1. Define your discord bot token as `TOKEN`, saucenao api token as `SAUCE_TOKEN`, reddit data as `REDDIT_ID` and `REDDIT_SECRET` respectively. Follow [these steps](https://github.com/reddit-archive/reddit/wiki/OAuth2-Quick-Start-Example#first-steps) to obtain the required reddit data.
     ### Example
     ```py
     TOKEN = "discordbottokenhere"
-    SAUCETOKEN = "saucenaoapitokenhere"
-    REDID = "redditappidhere"
-    REDSECRET = "redditappsecrethere"
-    REDNAME = "redditusernamehere"
-    REDPASS = "redditpasswordhere"
+    # Leave the strings below empty as "" if you don't plan on using them
+    SAUCE_TOKEN = "saucenaoapitokenhere"
+    REDDIT_ID = "redditappidhere"
+    REDDIT_SECRET = "redditappsecrethere"
     ```
 1. Run the bot with
     ```bash

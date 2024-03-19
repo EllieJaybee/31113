@@ -2,16 +2,17 @@ import crescent
 import hikari
 from pysaucenao import SauceNao, errors
 
-from bot.secret import SAUCETOKEN
+from bot.__main__ import Model
 
-plugin = crescent.Plugin()
+Plugin = crescent.Plugin[hikari.GatewayBot, Model]
+plugin = Plugin()
 
 
 @plugin.include
 @crescent.message_command(name="Find Sauce")
 async def sauce(ctx: crescent.Context, message: hikari.Message):
     await ctx.defer(ephemeral=True)
-    sauceclient = SauceNao(api_key=SAUCETOKEN, results_limit=1)
+    sauceclient = SauceNao(api_key=plugin.model.secret.SAUCE_TOKEN, results_limit=1)
     if message.attachments:
         for att in message.attachments:
             sourced = await sauceclient.from_url(att.url)

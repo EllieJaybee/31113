@@ -4,9 +4,8 @@ import miru
 from typing_extensions import Annotated as atd
 
 import asyncpraw
-from asyncpraw.models import Subreddit
+from asyncpraw.models import Subreddit, Submission
 
-from bot.secret import REDID, REDSECRET
 from bot.__main__ import Model
 
 Plugin = crescent.Plugin[hikari.GatewayBot, Model]
@@ -32,8 +31,8 @@ async def reddit(ctx: crescent.Context | miru.ViewContext, subreddit: str):
     if isinstance(ctx, crescent.Context):
         await ctx.defer()
     preddit = asyncpraw.Reddit(
-        client_id=REDID,
-        client_secret=REDSECRET,
+        client_id=plugin.model.secret.REDDIT_ID,
+        client_secret=plugin.model.secret.REDDIT_SECRET,
         user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
     )
     sub: Subreddit = await preddit.subreddit(subreddit, fetch=True)
@@ -41,7 +40,7 @@ async def reddit(ctx: crescent.Context | miru.ViewContext, subreddit: str):
         if isinstance(ctx, crescent.Context) and not ctx.channel.is_nsfw:
             await preddit.close()
             return await ctx.respond("horny 🫵", ephemeral=True)
-    post = await sub.random()
+    post: Submission = await sub.random()
     view = RedditView(subreddit=subreddit)
     respkwargs = {"components": view}
     if isinstance(ctx, crescent.Context):
