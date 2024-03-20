@@ -7,25 +7,25 @@ icon: material/book-open-variant-outline
 
 <div class="grid cards" markdown>
 
--   [:material-google: __Google Commands__](google.md)
+-   [:material-google: __Google Commands__](Commands/google.md)
 
     ---
 
     For commands related to search queries
 
--   [:material-robot-outline: __Meta Commands__](meta.md)
+-   [:material-robot-outline: __Meta Commands__](Commands/meta.md)
     
     ---
 
     For commands related to the bot itself
 
--   [:material-reddit: __Reddit Commands__](reddit.md)
+-   [:material-reddit: __Reddit Commands__](Commands/reddit.md)
 
     ---
 
     For commands accessing reddit posts
 
--   [:material-dice-multiple-outline: RNG Commands](rng.md)
+-   [:material-dice-multiple-outline: RNG Commands](Commands/rng.md)
 
     ---
 
