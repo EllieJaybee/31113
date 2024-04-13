@@ -102,7 +102,18 @@ async def image(ctx: crescent.Context, query: atd[str, "Image to search for"]):
     )
     root = soup.find("div", class_="kCmkOe")
     link = root.parent["href"]
-    image_link = root.img["src"]
+    url = urllib.parse.unquote(link).split("?q=")[1].split("&sa=")[0]
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            url,
+            headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"},
+        ) as response:
+            response_soup = bs(await response.text(), "html.parser")
+    image_element = response_soup.find(property="og:image")
+    if image_element:
+        image_link = image_element["content"]
+    else:
+        image_link = root.img["src"]
     embed = hikari.Embed(
         title="Jump to result!",
         url=urllib.parse.unquote(link).split("?q=")[1].split("&sa=")[0],
