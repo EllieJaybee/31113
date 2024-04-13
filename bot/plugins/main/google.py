@@ -76,7 +76,6 @@ async def define(ctx: crescent.Context, query: atd[str, "Phrase to be defined"])
         name=type, value=f"({pronounciation})"
     )
     await ctx.respond(embed=e)
-    # I'll be real I cba to recheck google's part for this again to refactor all this
 
 
 @plugin.include
