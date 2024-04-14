@@ -48,7 +48,7 @@ async def search(ctx: crescent.Context, query: atd[str, "Query to be searched"])
 @crescent.command(description="Answers your burning questions, powered by google")
 async def answer(ctx: crescent.Context, query: atd[str, "Your question"]):
     await ctx.defer()
-    soup = await request(ctx, params={"q": query})
+    soup = await request(params={"q": query})
     result = soup.find("div", class_="BNeawe s3v9rd AP7Wnd")
     await ctx.respond(result.text)
 
@@ -57,7 +57,7 @@ async def answer(ctx: crescent.Context, query: atd[str, "Your question"]):
 @crescent.command(description="Calculates stuff humanly, powered by google")
 async def calculate(ctx: crescent.Context, query: atd[str, "Your math question"]):
     await ctx.defer()
-    soup = await request(ctx, params={"q": query})
+    soup = await request(params={"q": query})
     question = soup.find("span", class_="BNeawe tAd8D AP7Wnd")
     if not question:
         await ctx.respond("Calculation invalid, reverting to a search...")
@@ -72,7 +72,7 @@ async def calculate(ctx: crescent.Context, query: atd[str, "Your math question"]
 @crescent.command(description="Defines a word or phrase queried, powered by google")
 async def define(ctx: crescent.Context, query: atd[str, "Phrase to be defined"]):
     await ctx.defer()
-    soup = await request(ctx, params={"q": f"define {query}"})
+    soup = await request(params={"q": f"define {query}"})
     root = soup.find_all("div", class_="kCrYT")
     root2 = root[1].find("div", class_="Ap5OSd")
     if not root2:
@@ -97,7 +97,7 @@ async def define(ctx: crescent.Context, query: atd[str, "Phrase to be defined"])
 @crescent.command(description="Gives a weather forecast for query, powered by google")
 async def weather(ctx: crescent.Context, query: atd[str, "Location/time query"]):
     await ctx.defer()
-    soup = await request(ctx, params={"q": f"weather {query}"})
+    soup = await request(params={"q": f"weather {query}"})
     main_weather = soup.find("div", class_="BNeawe tAd8D AP7Wnd")
     if not main_weather:
         await ctx.respond("Query invalid, reverting to a search...")
@@ -113,12 +113,11 @@ async def weather(ctx: crescent.Context, query: atd[str, "Location/time query"])
 async def image(ctx: crescent.Context, query: atd[str, "Image to search for"]):
     await ctx.defer()
     soup = await request(
-        ctx,
         params={
             "q": query,
             "safe": "off" if ctx.channel.is_nsfw else "strict",
             "tbm": "isch",
-        },
+        }
     )
     root = soup.find("div", class_="kCmkOe")
     if not root:
