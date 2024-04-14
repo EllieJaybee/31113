@@ -8,7 +8,7 @@ import urllib
 plugin = crescent.Plugin()
 
 
-async def request(ctx: crescent.Context, params: dict = None):
+async def request(params: dict = None):
     url = "https://www.google.com/search"
     async with aiohttp.ClientSession() as session:
         async with session.get(
@@ -22,7 +22,7 @@ async def request(ctx: crescent.Context, params: dict = None):
 
 async def _search(ctx: crescent.Context, query: str):
     soup = await request(
-        ctx, params={"q": query, "safe": "off" if ctx.channel.is_nsfw else "strict"}
+        params={"q": query, "safe": "off" if ctx.channel.is_nsfw else "strict"}
     )
     results = soup.find_all("div", class_="egMi0 kCrYT")
     for result in results:
