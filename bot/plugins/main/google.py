@@ -10,7 +10,6 @@ plugin = crescent.Plugin()
 
 async def request(ctx: crescent.Context, params: dict = None):
     url = "https://www.google.com/search"
-    await ctx.defer()
     async with aiohttp.ClientSession() as session:
         async with session.get(
             url,
@@ -21,9 +20,7 @@ async def request(ctx: crescent.Context, params: dict = None):
         return bs(response_text, "html.parser")
 
 
-@plugin.include
-@crescent.command(description="Fetches the first google search result")
-async def search(ctx: crescent.Context, query: atd[str, "Query to be searched"]):
+async def _search(ctx: crescent.Context, query: str):
     soup = await request(
         ctx, params={"q": query, "safe": "off" if ctx.channel.is_nsfw else "strict"}
     )
@@ -41,8 +38,16 @@ async def search(ctx: crescent.Context, query: atd[str, "Query to be searched"])
 
 
 @plugin.include
+@crescent.command(description="Fetches the first google search result")
+async def search(ctx: crescent.Context, query: atd[str, "Query to be searched"]):
+    await ctx.defer()
+    await _search(ctx, query)
+
+
+@plugin.include
 @crescent.command(description="Answers your burning questions, powered by google")
 async def answer(ctx: crescent.Context, query: atd[str, "Your question"]):
+    await ctx.defer()
     soup = await request(ctx, params={"q": query})
     result = soup.find("div", class_="BNeawe s3v9rd AP7Wnd")
     await ctx.respond(result.text)
@@ -51,8 +56,13 @@ async def answer(ctx: crescent.Context, query: atd[str, "Your question"]):
 @plugin.include
 @crescent.command(description="Calculates stuff humanly, powered by google")
 async def calculate(ctx: crescent.Context, query: atd[str, "Your math question"]):
+    await ctx.defer()
     soup = await request(ctx, params={"q": query})
-    question = soup.find("span", class_="BNeawe tAd8D AP7Wnd").text
+    question = soup.find("span", class_="BNeawe tAd8D AP7Wnd")
+    if not question:
+        await ctx.respond("Calculation invalid, reverting to a search...")
+        return await _search(ctx, query)
+    question = question.text
     answer = soup.find("div", class_="BNeawe iBp4i AP7Wnd").text
     embed = hikari.Embed(description=f"```\n{question}\n{answer}\n```")
     await ctx.respond(embed=embed)
@@ -61,9 +71,14 @@ async def calculate(ctx: crescent.Context, query: atd[str, "Your math question"]
 @plugin.include
 @crescent.command(description="Defines a word or phrase queried, powered by google")
 async def define(ctx: crescent.Context, query: atd[str, "Phrase to be defined"]):
+    await ctx.defer()
     soup = await request(ctx, params={"q": f"define {query}"})
     root = soup.find_all("div", class_="kCrYT")
-    root2 = root[1].find("div", class_="Ap5OSd").contents
+    root2 = root[1].find("div", class_="Ap5OSd")
+    if not root2:
+        await ctx.respond("Phrase invalid, reverting to a search...")
+        return await _search(ctx, query)
+    root2 = root2.contents
     phrase = root[0].span.h3.text
     pronounciation = root[0].contents[1].text
     type = root2[0].text.strip()
@@ -81,8 +96,13 @@ async def define(ctx: crescent.Context, query: atd[str, "Phrase to be defined"])
 @plugin.include
 @crescent.command(description="Gives a weather forecast for query, powered by google")
 async def weather(ctx: crescent.Context, query: atd[str, "Location/time query"]):
+    await ctx.defer()
     soup = await request(ctx, params={"q": f"weather {query}"})
-    main_weather = soup.find("div", class_="BNeawe tAd8D AP7Wnd").text
+    main_weather = soup.find("div", class_="BNeawe tAd8D AP7Wnd")
+    if not main_weather:
+        await ctx.respond("Query invalid, reverting to a search...")
+        return await _search(ctx, query)
+    main_weather = main_weather.text
     supplementary_temperature = soup.find("div", class_="BNeawe iBp4i AP7Wnd").text
     response = f"{main_weather} {supplementary_temperature}"
     await ctx.respond(response)
@@ -91,6 +111,7 @@ async def weather(ctx: crescent.Context, query: atd[str, "Location/time query"])
 @plugin.include
 @crescent.command(description="Fetches the first (lowres) image of the query on google")
 async def image(ctx: crescent.Context, query: atd[str, "Image to search for"]):
+    await ctx.defer()
     soup = await request(
         ctx,
         params={
@@ -100,6 +121,9 @@ async def image(ctx: crescent.Context, query: atd[str, "Image to search for"]):
         },
     )
     root = soup.find("div", class_="kCmkOe")
+    if not root:
+        await ctx.respond("Image query invalid, reverting to a search...")
+        return await _search(ctx, query)
     link = root.parent["href"]
     url = urllib.parse.unquote(link).split("?q=")[1].split("&sa=")[0]
     async with aiohttp.ClientSession() as session:
