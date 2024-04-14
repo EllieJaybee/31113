@@ -34,7 +34,7 @@ async def _search(ctx: crescent.Context, query: str):
             return await ctx.respond(
                 urllib.parse.unquote(result.a["href"]).split("?q=")[1].split("&sa=")[0]
             )
-    await ctx.respond(content="uguu sowwy owo can't find it uvu")
+    await ctx.respond(content="No results found :c")
 
 
 @plugin.include
