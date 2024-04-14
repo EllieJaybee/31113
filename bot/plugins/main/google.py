@@ -146,7 +146,7 @@ async def image(ctx: crescent.Context, query: atd[str, "Image to search for"]):
             image_link = main_image
         else:
             first_image = list(response_dict["media_metadata"].keys())[0]
-            image_link = f"https://i.redd.it/{first_image}.{response_dict["media_metadata"][first_image]["m"].replace("image/", "")}"
+            image_link = f"https://i.redd.it/{first_image}.{response_dict['media_metadata'][first_image]['m'].replace('image/', '')}"
     elif image_element:
         image_link = image_element["content"]
     elif twitter_image_element:
