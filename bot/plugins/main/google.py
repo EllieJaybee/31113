@@ -2,6 +2,8 @@ import aiohttp
 from bs4 import BeautifulSoup as bs
 import crescent
 import hikari
+
+import json
 from typing_extensions import Annotated as atd
 import urllib
 
@@ -125,15 +127,30 @@ async def image(ctx: crescent.Context, query: atd[str, "Image to search for"]):
         return await _search(ctx, query)
     link = root.parent["href"]
     url = urllib.parse.unquote(link).split("?q=")[1].split("&sa=")[0]
+    if "reddit.com" in url:
+        url = f"{url}.json"
     async with aiohttp.ClientSession() as session:
         async with session.get(
             url,
             headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"},
         ) as response:
-            response_soup = bs(await response.text(), "html.parser")
+            response_text = await response.text()
+            if "reddit.com" in url:
+                response_dict = json.loads(response_text)[0]["data"]["children"][0]["data"]
+            response_soup = bs(response_text, "html.parser")
     image_element = response_soup.find(property="og:image")
-    if image_element:
+    twitter_image_element = response_soup.find(string="twitter:image")
+    if "reddit.com" in url:
+        main_image = response_dict["url_overridden_by_dest"]
+        if "https://i.redd.it" in main_image:
+            image_link = main_image
+        else:
+            first_image = list(response_dict["media_metadata"].keys())[0]
+            image_link = f"https://i.redd.it/{first_image}.{response_dict["media_metadata"][first_image]["m"].replace("image/", "")}"
+    elif image_element:
         image_link = image_element["content"]
+    elif twitter_image_element:
+        image_link = twitter_image_element.parent["content"]
     else:
         image_link = root.img["src"]
     embed = hikari.Embed(
