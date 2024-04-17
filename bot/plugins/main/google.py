@@ -127,7 +127,8 @@ async def image(ctx: crescent.Context, query: atd[str, "Image to search for"]):
         return await _search(ctx, query)
     link = root.parent["href"]
     url = urllib.parse.unquote(link).split("?q=")[1].split("&sa=")[0]
-    if "reddit.com" in url:
+    reddit_element = "reddit.com" in url
+    if reddit_element:
         url = f"{url}.json"
     async with aiohttp.ClientSession() as session:
         async with session.get(
@@ -135,12 +136,12 @@ async def image(ctx: crescent.Context, query: atd[str, "Image to search for"]):
             headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"},
         ) as response:
             response_text = await response.text()
-            if "reddit.com" in url:
+            if reddit_element:
                 response_dict = json.loads(response_text)[0]["data"]["children"][0]["data"]
             response_soup = bs(response_text, "html.parser")
     image_element = response_soup.find(property="og:image")
     twitter_image_element = response_soup.find(string="twitter:image")
-    if "reddit.com" in url:
+    if reddit_element:
         main_image = response_dict["url_overridden_by_dest"]
         if "https://i.redd.it" in main_image:
             image_link = main_image
