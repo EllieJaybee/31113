@@ -19,6 +19,8 @@ def main():
     miru_client = miru.Client(bot)
     crescent_client = crescent.Client(bot, Model(miru_client, secret))
     crescent_client.plugins.load_folder("bot.plugins.main")
+    if bot.get_me().id == 937305077281071124:
+        crescent_client.plugins.load_folder("bot.plugins.privileges")
     if all([secret.REDDIT_ID, secret.REDDIT_SECRET]):
         crescent_client.plugins.load_folder("bot.plugins.reddit")
         logger.info("Activated Reddit Module")
