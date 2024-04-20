@@ -51,12 +51,22 @@ icon: material/google
 
 ---
 
+### [:material-slash-forward-box:][slash]`image <query>`
+
+:   Searches the query on google and returns the first image
+
+    ``` cirru
+    /image query: snail
+    ```
+
+---
+
 ### [:material-slash-forward-box:][slash]`search <query>`
 
 :   Searches the query on google and returns the first link.
 
     ``` cirru
-    /search query: snails
+    /search query: snail
     ```
 
     ```
