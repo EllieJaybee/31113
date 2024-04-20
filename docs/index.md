@@ -31,4 +31,10 @@ icon: material/book-open-variant-outline
 
     For commands using randomizers
 
+-   [:material-list-box-outline: SauceNao Commands](Commands/saucenao.md)
+
+    ---
+
+    For command to reverse search images
+
 </div>
