@@ -25,13 +25,13 @@ icon: material/book-open-variant-outline
 
     For commands accessing reddit posts
 
--   [:material-dice-multiple-outline: RNG Commands](Commands/rng.md)
+-   [:material-dice-multiple-outline: __RNG Commands__](Commands/rng.md)
 
     ---
 
     For commands using randomizers
 
--   [:material-list-box-outline: SauceNao Commands](Commands/saucenao.md)
+-   [:material-list-box-outline: __SauceNao Commands__](Commands/saucenao.md)
 
     ---
 
