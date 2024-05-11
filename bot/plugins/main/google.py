@@ -1,5 +1,6 @@
 import aiohttp
 from bs4 import BeautifulSoup as bs
+from bs4 import Tag
 import crescent
 import hikari
 
@@ -110,6 +111,18 @@ async def weather(ctx: crescent.Context, query: atd[str, "Location/time query"])
     await ctx.respond(response)
 
 
+async def traverse(element: Tag):
+    if (
+        "facebook.com"
+        in urllib.parse.unquote(element.div.div.div.div.table.tr.td.a["href"])
+        .split("?q=")[1]
+        .split("&sa=")[0]
+    ):
+        return await traverse(element.next_sibling)
+    else:
+        return element.div.div.div.div.table.tr.td.a.div
+
+
 @plugin.include
 @crescent.command(description="Fetches the first (lowres) image of the query on google")
 async def image(ctx: crescent.Context, query: atd[str, "Image to search for"]):
@@ -121,12 +134,12 @@ async def image(ctx: crescent.Context, query: atd[str, "Image to search for"]):
             "tbm": "isch",
         }
     )
-    root = soup.find("div", class_="kCmkOe")
+    root = await traverse(soup.find("td", class_="e3goi"))
     if not root:
         await ctx.respond("Image query invalid, reverting to a search...")
         return await _search(ctx, query)
     link = root.parent["href"]
-    url = urllib.parse.unquote(link).split("?q=")[1].split("&sa=")[0]
+    url: str = urllib.parse.unquote(link).split("?q=")[1].split("&sa=")[0]
     reddit_element = "reddit.com" in url
     if reddit_element:
         url = f"{url}.json"
@@ -137,7 +150,9 @@ async def image(ctx: crescent.Context, query: atd[str, "Image to search for"]):
         ) as response:
             response_text = await response.text()
             if reddit_element:
-                response_dict = json.loads(response_text)[0]["data"]["children"][0]["data"]
+                response_dict = json.loads(response_text)[0]["data"]["children"][0][
+                    "data"
+                ]
             response_soup = bs(response_text, "html.parser")
     image_element = response_soup.find(property="og:image")
     twitter_image_element = response_soup.find(string="twitter:image")
