@@ -14,7 +14,7 @@ class Model:
 
 def main():
     intents = hikari.Intents.ALL
-    bot = hikari.GatewayBot(secret.TOKEN, banner="bot", intents=intents)
+    bot = hikari.GatewayBot(secret.TOKEN, banner="bot", intents=intents, force_color=True)
     logger = logging.getLogger("hikari.gateway")
     miru_client = miru.Client(bot)
     crescent_client = crescent.Client(bot, Model(miru_client, secret))
