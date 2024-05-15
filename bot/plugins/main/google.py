@@ -11,7 +11,7 @@ import urllib
 plugin = crescent.Plugin()
 
 
-async def request(params: dict = None):
+async def request(params: dict = None) -> bs:
     url = "https://www.google.com/search"
     async with aiohttp.ClientSession() as session:
         async with session.get(
@@ -23,7 +23,7 @@ async def request(params: dict = None):
         return bs(response_text, "html.parser")
 
 
-async def _search(ctx: crescent.Context, query: str):
+async def _search(ctx: crescent.Context, query: str) -> hikari.Message | None:
     soup = await request(
         params={"q": query, "safe": "off" if ctx.channel.is_nsfw else "strict"}
     )
@@ -111,7 +111,7 @@ async def weather(ctx: crescent.Context, query: atd[str, "Location/time query"])
     await ctx.respond(response)
 
 
-async def traverse(element: Tag):
+async def traverse(element: Tag) -> Tag:
     if (
         "facebook.com"
         in urllib.parse.unquote(element.div.div.div.div.table.tr.td.a["href"])
