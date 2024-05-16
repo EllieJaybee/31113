@@ -112,12 +112,19 @@ async def weather(ctx: crescent.Context, query: atd[str, "Location/time query"])
 
 
 async def traverse(element: Tag) -> Tag:
-    if (
-        "facebook.com"
-        in urllib.parse.unquote(element.div.div.div.div.table.tr.td.a["href"])
-        .split("?q=")[1]
-        .split("&sa=")[0]
+    if any(
+        [
+            _
+            in urllib.parse.unquote(element.div.div.div.div.table.tr.td.a["href"])
+            .split("?q=")[1]
+            .split("&sa=")[0]
+            for _ in ["facebook.com", "tiktok.com"]
+        ]
     ):
+        if not element.next_sibling:
+            if not element.parent.next_sibling:
+                return None
+            return await traverse(element.parent.next_sibling.td)
         return await traverse(element.next_sibling)
     else:
         return element.div.div.div.div.table.tr.td.a.div
@@ -144,7 +151,7 @@ async def get_hires_reddit_link(response: dict) -> str:
         return f"https://i.redd.it/{first_image}.{response['media_metadata'][first_image]['m'].replace('image/', '')}"
 
 
-async def get_hires_other_link(response: Tag) -> str:
+async def get_hires_other_link(response: bs) -> str | None:
     if response.find(property="og:image"):
         return response.find(property="og:image")["content"]
     elif response.find(string="twitter:image"):
@@ -153,10 +160,10 @@ async def get_hires_other_link(response: Tag) -> str:
         return None
 
 
-async def get_hires_link(response: dict | Tag) -> str:
+async def get_hires_link(response: dict | bs) -> str | None:
     if isinstance(response, dict):
         return await get_hires_reddit_link(response)
-    elif isinstance(response, Tag):
+    else:
         return await get_hires_other_link(response)
 
 
