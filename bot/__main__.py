@@ -12,8 +12,12 @@ class Model:
     secret: secret
 
 
-def main():
-    intents = hikari.Intents.ALL
+def start_bot():
+    intents = (
+        hikari.Intents.ALL_UNPRIVILEGED |
+        hikari.Intents.GUILD_MEMBERS    |
+        hikari.Intents.MESSAGE_CONTENT
+    )
     bot = hikari.GatewayBot(secret.TOKEN, banner="bot", intents=intents, force_color=True)
     logger = logging.getLogger("hikari.gateway")
     miru_client = miru.Client(bot)
