@@ -12,7 +12,7 @@ class Model:
     secret: secret
 
 
-def start_bot():
+def main():
     intents = (
         hikari.Intents.ALL_UNPRIVILEGED |
         hikari.Intents.GUILD_MEMBERS    |
