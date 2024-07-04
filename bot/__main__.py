@@ -1,3 +1,4 @@
+import argparse
 from dataclasses import dataclass
 import crescent
 import hikari
@@ -20,9 +21,15 @@ def main():
     )
     bot = hikari.GatewayBot(secret.TOKEN, banner="bot", intents=intents, force_color=True)
     logger = logging.getLogger("hikari.gateway")
+    if args.debug:
+        logger.setLevel("DEBUG")
+    logger.info("Logger initialized")
     miru_client = miru.Client(bot)
+    logger.info("Loaded Miru")
     crescent_client = crescent.Client(bot, Model(miru_client, secret))
+    logger.info("Loaded Crescent")
     crescent_client.plugins.load_folder("bot.plugins.main")
+    logger.info("Activated Main Modules")
     crescent_client.plugins.load_folder("bot.plugins.privileges")
     if all([secret.REDDIT_ID, secret.REDDIT_SECRET]):
         crescent_client.plugins.load_folder("bot.plugins.reddit")
