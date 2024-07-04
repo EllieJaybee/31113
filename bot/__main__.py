@@ -6,6 +6,10 @@ import logging
 import miru
 from bot import secret
 
+parser = argparse.ArgumentParser(description="Run 31113")
+parser.add_argument("--debug", dest="debug", help="set log level to DEBUG", action="store_true")
+args = parser.parse_args()
+
 
 @dataclass
 class Model:
