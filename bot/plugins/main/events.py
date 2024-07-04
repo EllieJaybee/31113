@@ -37,3 +37,11 @@ async def startup(event: hikari.GuildAvailableEvent):
     for channel_id in guild.get_channels():
         channel = guild.get_channel(channel_id)
         logger.debug(f"L Connected to #{channel.name}({channel.id})")
+
+
+@plugin.include
+@crescent.catch_command(Exception)
+async def on_any_command_error(exc: Exception, ctx: crescent.Context):
+    await ctx.respond("Unknown error. Report to maintainer")
+    logger.error(f"{exc}")
+    raise
