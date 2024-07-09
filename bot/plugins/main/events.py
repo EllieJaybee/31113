@@ -20,7 +20,7 @@ async def command_log(event: hikari.InteractionCreateEvent):
     elif interaction.type.value == 3:
         component_interaction: hikari.ComponentInteraction = interaction
         if component_interaction.component_type == 2:
-            logger.info(
+            logger.debug(
                 f"User {component_interaction.user.global_name}({component_interaction.user.id})"
                 f" clicked button in {component_interaction.get_channel() or "DM"}"
                 f"({component_interaction.channel_id})"
