@@ -15,14 +15,14 @@ async def command_log(event: hikari.InteractionCreateEvent):
         logger.debug(
             f"User {command_interaction.user.global_name}({command_interaction.user.id})"
             f" triggered {command_interaction.command_name}"
-            f" in {command_interaction.get_channel() or "DM"}({command_interaction.channel_id})"
+            f" in {command_interaction.get_channel() or 'DM'}({command_interaction.channel_id})"
         )
     elif interaction.type.value == 3:
         component_interaction: hikari.ComponentInteraction = interaction
         if component_interaction.component_type == 2:
             logger.debug(
                 f"User {component_interaction.user.global_name}({component_interaction.user.id})"
-                f" clicked button in {component_interaction.get_channel() or "DM"}"
+                f" clicked button in {component_interaction.get_channel() or 'DM'}"
                 f"({component_interaction.channel_id})"
             )
     else:
@@ -37,6 +37,7 @@ async def startup(event: hikari.GuildAvailableEvent):
     for channel_id in guild.get_channels():
         channel = guild.get_channel(channel_id)
         logger.debug(f"L Connected to #{channel.name}({channel.id})")
+    logger.debug('-')
 
 
 @plugin.include
