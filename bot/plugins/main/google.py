@@ -5,7 +5,6 @@ import crescent
 import hikari
 
 import json
-from typing_extensions import Annotated as atd
 import urllib
 
 plugin = crescent.Plugin()
@@ -41,74 +40,84 @@ async def _search(ctx: crescent.Context, query: str) -> hikari.Message | None:
 
 
 @plugin.include
-@crescent.command(description="Fetches the first google search result")
-async def search(ctx: crescent.Context, query: atd[str, "Query to be searched"]):
-    await ctx.defer()
-    await _search(ctx, query)
+@crescent.command(name="search", description="Fetches the first google search result")
+class Search:
+    query = crescent.option(str, "Query to be searched")
+    async def callback(self, ctx: crescent.Context):
+        await ctx.defer()
+        await _search(ctx, self.query)
 
 
 @plugin.include
-@crescent.command(description="Answers your burning questions, powered by google")
-async def answer(ctx: crescent.Context, query: atd[str, "Your question"]):
-    await ctx.defer()
-    soup = await request(params={"q": query})
-    result = soup.find("div", class_="BNeawe s3v9rd AP7Wnd")
-    await ctx.respond(result.text)
+@crescent.command(name="answer", description="Answers your burning questions, powered by google")
+class Answer:
+    query = crescent.option(str, "Your question")
+    async def callback(self, ctx: crescent.Context):
+        await ctx.defer()
+        soup = await request(params={"q": self.query})
+        result = soup.find("div", class_="BNeawe s3v9rd AP7Wnd")
+        await ctx.respond(result.text)
 
 
 @plugin.include
-@crescent.command(description="Calculates stuff humanly, powered by google")
-async def calculate(ctx: crescent.Context, query: atd[str, "Your math question"]):
-    await ctx.defer()
-    soup = await request(params={"q": query})
-    question = soup.find("span", class_="BNeawe tAd8D AP7Wnd")
-    if not question:
-        await ctx.respond("Calculation invalid, reverting to a search...")
-        return await _search(ctx, query)
-    question = question.text
-    answer = soup.find("div", class_="BNeawe iBp4i AP7Wnd").text
-    embed = hikari.Embed(description=f"```\n{question}\n{answer}\n```")
-    await ctx.respond(embed=embed)
+@crescent.command(name="calculate", description="Calculates stuff humanly, powered by google")
+class Calculate:
+    query = crescent.option(str, "Your math question")
+    async def callback(self, ctx: crescent.Context):
+        await ctx.defer()
+        soup = await request(params={"q": self.query})
+        question = soup.find("span", class_="BNeawe tAd8D AP7Wnd")
+        if not question:
+            await ctx.respond("Calculation invalid, reverting to a search...")
+            return await _search(ctx, self.query)
+        question = question.text
+        answer = soup.find("div", class_="BNeawe iBp4i AP7Wnd").text
+        embed = hikari.Embed(description=f"```\n{question}\n{answer}\n```")
+        await ctx.respond(embed=embed)
 
 
 @plugin.include
-@crescent.command(description="Defines a word or phrase queried, powered by google")
-async def define(ctx: crescent.Context, query: atd[str, "Phrase to be defined"]):
-    await ctx.defer()
-    soup = await request(params={"q": f"define {query}"})
-    root = soup.find_all("div", class_="kCrYT")
-    root2 = root[1].find("div", class_="Ap5OSd")
-    if not root2:
-        await ctx.respond("Phrase invalid, reverting to a search...")
-        return await _search(ctx, query)
-    root2 = root2.contents
-    phrase = root[0].span.h3.text
-    pronounciation = root[0].contents[1].text
-    type = root2[0].text.strip()
-    apsos = root[1].div.find_all("div", class_="Ap5OSd")[1]
-    try:
-        meaning = apsos.ol.li.div.div.text
-    except AttributeError:
-        meaning = apsos.div.div.div.text
-    e = hikari.Embed(title=phrase, description=meaning).add_field(
-        name=type, value=f"({pronounciation})"
-    )
-    await ctx.respond(embed=e)
+@crescent.command(name="define", description="Defines a word or phrase queried, powered by google")
+class Define:
+    query = crescent.option(str, "Phrase to be defined")
+    async def callback(self, ctx: crescent.Context):
+        await ctx.defer()
+        soup = await request(params={"q": f"define {self.query}"})
+        root = soup.find_all("div", class_="kCrYT")
+        root2 = root[1].find("div", class_="Ap5OSd")
+        if not root2:
+            await ctx.respond("Phrase invalid, reverting to a search...")
+            return await _search(ctx, self.query)
+        root2 = root2.contents
+        phrase = root[0].span.h3.text
+        pronounciation = root[0].contents[1].text
+        type = root2[0].text.strip()
+        apsos = root[1].div.find_all("div", class_="Ap5OSd")[1]
+        try:
+            meaning = apsos.ol.li.div.div.text
+        except AttributeError:
+            meaning = apsos.div.div.div.text
+        e = hikari.Embed(title=phrase, description=meaning).add_field(
+            name=type, value=f"({pronounciation})"
+        )
+        await ctx.respond(embed=e)
 
 
 @plugin.include
-@crescent.command(description="Gives a weather forecast for query, powered by google")
-async def weather(ctx: crescent.Context, query: atd[str, "Location/time query"]):
-    await ctx.defer()
-    soup = await request(params={"q": f"weather {query}"})
-    main_weather = soup.find("div", class_="BNeawe tAd8D AP7Wnd")
-    if not main_weather:
-        await ctx.respond("Query invalid, reverting to a search...")
-        return await _search(ctx, query)
-    main_weather = main_weather.text
-    supplementary_temperature = soup.find("div", class_="BNeawe iBp4i AP7Wnd").text
-    response = f"{main_weather} {supplementary_temperature}"
-    await ctx.respond(response)
+@crescent.command(name="weather", description="Gives a weather forecast for query, powered by google")
+class Weather:
+    query = crescent.option(str, "Location/time query")
+    async def callback(self, ctx: crescent.Context):
+        await ctx.defer()
+        soup = await request(params={"q": f"weather {self.query}"})
+        main_weather = soup.find("div", class_="BNeawe tAd8D AP7Wnd")
+        if not main_weather:
+            await ctx.respond("Query invalid, reverting to a search...")
+            return await _search(ctx, self.query)
+        main_weather = main_weather.text
+        supplementary_temperature = soup.find("div", class_="BNeawe iBp4i AP7Wnd").text
+        response = f"{main_weather} {supplementary_temperature}"
+        await ctx.respond(response)
 
 
 async def traverse(element: Tag) -> Tag:
@@ -168,29 +177,31 @@ async def get_hires_link(response: dict | bs) -> str | None:
 
 
 @plugin.include
-@crescent.command(description="Fetches the first (lowres) image of the query on google")
-async def image(ctx: crescent.Context, query: atd[str, "Image to search for"]):
-    await ctx.defer()
-    soup = await request(
-        params={
-            "q": query,
-            "safe": "off" if ctx.channel.is_nsfw else "strict",
-            "tbm": "isch",
-        }
-    )
-    root = await traverse(soup.find("td", class_="e3goi"))
-    if not root:
-        await ctx.respond("Image query invalid, reverting to a search...")
-        return await _search(ctx, query)
-    link = root.parent["href"]
-    url: str = urllib.parse.unquote(link).split("?q=")[1].split("&sa=")[0]
-    response = await find_hires(url)
-    image_link = await get_hires_link(response)
-    if not image_link:
-        image_link = root.img["src"]
-    embed = hikari.Embed(
-        title="Jump to result!",
-        url=urllib.parse.unquote(link).split("?q=")[1].split("&sa=")[0],
-    )
-    embed.set_image(image_link)
-    await ctx.respond(embed=embed)
+@crescent.command(name="image", description="Fetches the first (lowres) image of the query on google")
+class Image:
+    query = crescent.option(str, "Image to search for")
+    async def callback(self, ctx: crescent.Context):
+        await ctx.defer()
+        soup = await request(
+            params={
+                "q": self.query,
+                "safe": "off" if ctx.channel.is_nsfw else "strict",
+                "tbm": "isch",
+            }
+        )
+        root = await traverse(soup.find("td", class_="e3goi"))
+        if not root:
+            await ctx.respond("Image query invalid, reverting to a search...")
+            return await _search(ctx, self.query)
+        link = root.parent["href"]
+        url: str = urllib.parse.unquote(link).split("?q=")[1].split("&sa=")[0]
+        response = await find_hires(url)
+        image_link = await get_hires_link(response)
+        if not image_link:
+            image_link = root.img["src"]
+        embed = hikari.Embed(
+            title="Jump to result!",
+            url=urllib.parse.unquote(link).split("?q=")[1].split("&sa=")[0],
+        )
+        embed.set_image(image_link)
+        await ctx.respond(embed=embed)

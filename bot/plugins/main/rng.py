@@ -1,6 +1,5 @@
 import crescent
 import random
-from typing_extensions import Annotated as atd
 
 plugin = crescent.Plugin()
 
@@ -18,22 +17,23 @@ async def pickmember(ctx: crescent.Context):
 
 
 @plugin.include
-@crescent.command(description="Generates a random number in a range")
-async def rng(
-    ctx: crescent.Context,
-    min: atd[int, "Lowest number"],
-    max: atd[int, "Highest number"],
-):
-    await ctx.respond(random.randint(min, max))
+@crescent.command(name="rng", description="Generates a random number in a range")
+class RNG:
+    min = crescent.option(int, "Lowest number")
+    max = crescent.option(int, "Highest number")
+    async def callback(self, ctx: crescent.Context):
+        await ctx.respond(random.randint(self.min, self.max))
 
 
 @plugin.include
-@crescent.command(description="Pick randomly from a list of choices")
-async def pick(ctx: crescent.Context, choices: atd[str, "Choices separated by commas"]):
-    choice_list = choices.split(",")
-    await ctx.respond(
-        random.choice(choice_list),
-        mentions_everyone=False,
-        role_mentions=False,
-        user_mentions=False,
-    )
+@crescent.command(name="pick", description="Pick randomly from a list of choices")
+class Pick:
+    choices = crescent.option(str, "Choices separated by commas")
+    async def callback(self, ctx: crescent.Context):
+        choice_list = self.choices.split(",")
+        await ctx.respond(
+            random.choice(choice_list),
+            mentions_everyone=False,
+            role_mentions=False,
+            user_mentions=False,
+        )

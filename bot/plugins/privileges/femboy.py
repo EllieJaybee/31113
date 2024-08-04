@@ -1,6 +1,5 @@
 import crescent
 import hikari
-from typing_extensions import Annotated as atd
 
 from bot.privilege import is_femboy
 
@@ -33,7 +32,7 @@ async def give_member(ctx: crescent.Context, member: hikari.Member):
 @crescent.command(
     name="member", description="Grant Member role", guild=938699961112096768
 )
-async def member_slash(
-    ctx: crescent.Context, member: atd[hikari.User, "Person to be a member"]
-):
-    await give_member(ctx, member)
+class MemberSlash:
+    member = crescent.option(hikari.User, "Person to be a member")
+    async def callback(self, ctx: crescent.Context):
+        await give_member(ctx, self.member)

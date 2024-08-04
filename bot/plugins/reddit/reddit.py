@@ -1,7 +1,6 @@
 import crescent
 import hikari
 import miru
-from typing_extensions import Annotated as atd
 
 import asyncpraw
 from asyncpraw.models import Subreddit, Submission
@@ -57,10 +56,10 @@ async def reddit(ctx: crescent.Context | miru.ViewContext, subreddit: str):
 
 @plugin.include
 @crescent.command(name="reddit", description="Fetches hot reddit stuff")
-async def reddit_(
-    ctx: crescent.Context, subreddit: atd[str, "subreddit you wanna fetch"]
-):
-    await reddit(ctx, subreddit)
+class RedditClassCommand:
+    subreddit = crescent.option(str, "subreddit you wanna fetch")
+    async def callback(self, ctx: crescent.Context):
+        await reddit(ctx, self.subreddit)
 
 
 @plugin.include
