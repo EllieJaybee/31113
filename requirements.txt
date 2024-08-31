@@ -1,4 +1,5 @@
 asyncpraw
+anime-api
 beautifulsoup4
 hikari-crescent
 hikari-miru
