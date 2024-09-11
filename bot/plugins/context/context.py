@@ -13,7 +13,9 @@ class NoSauceError(IndexError):
 
 
 @plugin.include
-@crescent.message_command(name="Find Sauce", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.message_command(
+    name="Find Sauce", default_member_permissions=hikari.Permissions.VIEW_CHANNEL
+)
 async def sauce(ctx: crescent.Context, message: hikari.Message):
     await ctx.defer(ephemeral=True)
     sauceclient = SauceNao(api_key=plugin.model.secret.SAUCE_TOKEN, results_limit=1)

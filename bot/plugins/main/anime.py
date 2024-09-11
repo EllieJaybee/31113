@@ -29,7 +29,11 @@ async def action(
 
 
 @plugin.include
-@crescent.command(name="bite", description="Bite someone!", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="bite",
+    description="Bite someone!",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class BiteCommand:
     target = crescent.option(hikari.User, "Who do you want to bite?")
 
@@ -38,7 +42,11 @@ class BiteCommand:
 
 
 @plugin.include
-@crescent.command(name="boop", description="Boop someone!", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="boop",
+    description="Boop someone!",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class BoopCommand:
     target = crescent.option(hikari.User, "Who do you want to boop?")
 
@@ -47,7 +55,11 @@ class BoopCommand:
 
 
 @plugin.include
-@crescent.command(name="bully", description="Bully someone!", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="bully",
+    description="Bully someone!",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class BullyCommand:
     target = crescent.option(hikari.User, "Who do you want to bully?")
 
@@ -56,7 +68,11 @@ class BullyCommand:
 
 
 @plugin.include
-@crescent.command(name="cuddle", description="Cuddle someone!", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="cuddle",
+    description="Cuddle someone!",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class CuddleCommand:
     target = crescent.option(hikari.User, "Who do you want to cuddle?")
 
@@ -65,7 +81,11 @@ class CuddleCommand:
 
 
 @plugin.include
-@crescent.command(name="greet", description="Greet someone!", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="greet",
+    description="Greet someone!",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class WaveCommand:
     target = crescent.option(hikari.User, "Who do you want to greet?")
 
@@ -74,7 +94,11 @@ class WaveCommand:
 
 
 @plugin.include
-@crescent.command(name="handhold", description="Hold someone's hand!", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="handhold",
+    description="Hold someone's hand!",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class HoldCommand:
     target = crescent.option(hikari.User, "Who do you want to hold?")
 
@@ -83,7 +107,11 @@ class HoldCommand:
 
 
 @plugin.include
-@crescent.command(name="hug", description="Hug someone!", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="hug",
+    description="Hug someone!",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class HugCommand:
     target = crescent.option(hikari.User, "Who do you want to hug?")
 
@@ -92,7 +120,11 @@ class HugCommand:
 
 
 @plugin.include
-@crescent.command(name="highfive", description="Highfive someone!", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="highfive",
+    description="Highfive someone!",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class FiveCommand:
     target = crescent.option(hikari.User, "Who do you want to highfive?")
 
@@ -101,7 +133,11 @@ class FiveCommand:
 
 
 @plugin.include
-@crescent.command(name="kill", description="Kill someone!", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="kill",
+    description="Kill someone!",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class KillCommand:
     target = crescent.option(hikari.User, "Who do you want to kill?")
 
@@ -110,7 +146,11 @@ class KillCommand:
 
 
 @plugin.include
-@crescent.command(name="kiss", description="Kiss someone!", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="kiss",
+    description="Kiss someone!",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class KissCommand:
     target = crescent.option(hikari.User, "Who do you want to kiss?")
 
@@ -119,7 +159,11 @@ class KissCommand:
 
 
 @plugin.include
-@crescent.command(name="lick", description="Lick someone!", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="lick",
+    description="Lick someone!",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class LickCommand:
     target = crescent.option(hikari.User, "Who do you want to lick?")
 
@@ -128,7 +172,11 @@ class LickCommand:
 
 
 @plugin.include
-@crescent.command(name="pat", description="Pat someone!", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="pat",
+    description="Pat someone!",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class PatCommand:
     target = crescent.option(hikari.User, "Who do you want to pat?")
 
@@ -137,7 +185,11 @@ class PatCommand:
 
 
 @plugin.include
-@crescent.command(name="poke", description="Poke someone!", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="poke",
+    description="Poke someone!",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class PokeCommand:
     target = crescent.option(hikari.User, "Who do you want to poke?")
 
@@ -146,7 +198,11 @@ class PokeCommand:
 
 
 @plugin.include
-@crescent.command(name="punch", description="Punch someone!", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="punch",
+    description="Punch someone!",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class PunchCommand:
     target = crescent.option(hikari.User, "Who do you want to punch?")
 
@@ -155,7 +211,11 @@ class PunchCommand:
 
 
 @plugin.include
-@crescent.command(name="slap", description="Slap someone!", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="slap",
+    description="Slap someone!",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class SlapCommand:
     target = crescent.option(hikari.User, "Who do you want to slap?")
 
@@ -164,7 +224,11 @@ class SlapCommand:
 
 
 @plugin.include
-@crescent.command(name="stare", description="Stare at someone!", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="stare",
+    description="Stare at someone!",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class StareCommand:
     target = crescent.option(hikari.User, "Who do you want to stare at?")
 
@@ -173,7 +237,11 @@ class StareCommand:
 
 
 @plugin.include
-@crescent.command(name="tickle", description="Tickle someone!", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="tickle",
+    description="Tickle someone!",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class TickleCommand:
     target = crescent.option(hikari.User, "Who do you want to tickle?")
 

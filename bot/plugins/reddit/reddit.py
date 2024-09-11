@@ -55,32 +55,49 @@ async def reddit(ctx: crescent.Context | miru.ViewContext, subreddit: str):
 
 
 @plugin.include
-@crescent.command(name="reddit", description="Fetches hot reddit stuff", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    name="reddit",
+    description="Fetches hot reddit stuff",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 class RedditClassCommand:
     subreddit = crescent.option(str, "subreddit you wanna fetch")
+
     async def callback(self, ctx: crescent.Context):
         await reddit(ctx, self.subreddit)
 
 
 @plugin.include
-@crescent.command(description="Fetches a random hot reddit femboy post", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    description="Fetches a random hot reddit femboy post",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 async def femboy(ctx: crescent.Context):
     await reddit(ctx, "Femboys")
 
 
 @plugin.include
-@crescent.command(description="Fetches a random hot reddit trap hentai post", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    description="Fetches a random hot reddit trap hentai post",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 async def trap(ctx: crescent.Context):
     await reddit(ctx, "traphentai")
 
 
 @plugin.include
-@crescent.command(description="Fetches a random hot reddit hentai post", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    description="Fetches a random hot reddit hentai post",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 async def hentai(ctx: crescent.Context):
     await reddit(ctx, "hentai")
 
 
 @plugin.include
-@crescent.command(description="Fetches cat pics", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
+@crescent.command(
+    description="Fetches cat pics",
+    default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
+)
 async def meow(ctx: crescent.Context):
     await reddit(ctx, "cats")

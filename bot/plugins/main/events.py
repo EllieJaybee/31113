@@ -37,7 +37,7 @@ async def startup(event: hikari.GuildAvailableEvent):
     for channel_id in guild.get_channels():
         channel = guild.get_channel(channel_id)
         logger.debug(f"L Connected to #{channel.name}({channel.id})")
-    logger.debug('-')
+    logger.debug("-")
 
 
 @plugin.include
