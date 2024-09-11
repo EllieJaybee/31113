@@ -40,7 +40,7 @@ async def _search(ctx: crescent.Context, query: str) -> hikari.Message | None:
 
 
 @plugin.include
-@crescent.command(name="search", description="Fetches the first google search result")
+@crescent.command(name="search", description="Fetches the first google search result", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
 class Search:
     query = crescent.option(str, "Query to be searched")
     async def callback(self, ctx: crescent.Context):
@@ -49,7 +49,7 @@ class Search:
 
 
 @plugin.include
-@crescent.command(name="answer", description="Answers your burning questions, powered by google")
+@crescent.command(name="answer", description="Answers your burning questions, powered by google", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
 class Answer:
     query = crescent.option(str, "Your question")
     async def callback(self, ctx: crescent.Context):
@@ -60,7 +60,7 @@ class Answer:
 
 
 @plugin.include
-@crescent.command(name="calculate", description="Calculates stuff humanly, powered by google")
+@crescent.command(name="calculate", description="Calculates stuff humanly, powered by google", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
 class Calculate:
     query = crescent.option(str, "Your math question")
     async def callback(self, ctx: crescent.Context):
@@ -77,7 +77,7 @@ class Calculate:
 
 
 @plugin.include
-@crescent.command(name="define", description="Defines a word or phrase queried, powered by google")
+@crescent.command(name="define", description="Defines a word or phrase queried, powered by google", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
 class Define:
     query = crescent.option(str, "Phrase to be defined")
     async def callback(self, ctx: crescent.Context):
@@ -104,7 +104,7 @@ class Define:
 
 
 @plugin.include
-@crescent.command(name="weather", description="Gives a weather forecast for query, powered by google")
+@crescent.command(name="weather", description="Gives a weather forecast for query, powered by google", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
 class Weather:
     query = crescent.option(str, "Location/time query")
     async def callback(self, ctx: crescent.Context):
@@ -177,7 +177,7 @@ async def get_hires_link(response: dict | bs) -> str | None:
 
 
 @plugin.include
-@crescent.command(name="image", description="Fetches the first (lowres) image of the query on google")
+@crescent.command(name="image", description="Fetches the first (lowres) image of the query on google", default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
 class Image:
     query = crescent.option(str, "Image to search for")
     async def callback(self, ctx: crescent.Context):

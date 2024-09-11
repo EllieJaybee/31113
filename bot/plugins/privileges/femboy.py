@@ -30,7 +30,7 @@ async def give_member(ctx: crescent.Context, member: hikari.Member):
 @plugin.include
 @crescent.hook(is_femboy)
 @crescent.command(
-    name="member", description="Grant Member role", guild=938699961112096768
+    name="member", description="Grant Member role", guild=938699961112096768, default_member_permissions=hikari.Permissions.VIEW_CHANNEL
 )
 class MemberSlash:
     member = crescent.option(hikari.User, "Person to be a member")

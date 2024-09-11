@@ -8,7 +8,7 @@ plugin = crescent.Plugin()
 
 @plugin.include
 @crescent.hook(is_member)
-@crescent.command(name="roleicon", description="Change role icon", guild=938699961112096768)
+@crescent.command(name="roleicon", description="Change role icon", guild=938699961112096768, default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
 class RoleIcon:
     icon = crescent.option(hikari.Attachment, "Icon to be applied to role")
     async def callback(self, ctx: crescent.Context):
@@ -22,7 +22,7 @@ class RoleIcon:
 @plugin.include
 @crescent.hook(is_member)
 @crescent.command(
-    name="roleicon-clear", description="Clear role icon", guild=938699961112096768
+    name="roleicon-clear", description="Clear role icon", guild=938699961112096768, default_member_permissions=hikari.Permissions.VIEW_CHANNEL
 )
 async def roleicon_clear(ctx: crescent.Context):
     for role in ctx.member.get_roles():
@@ -34,7 +34,7 @@ async def roleicon_clear(ctx: crescent.Context):
 
 @plugin.include
 @crescent.hook(is_member)
-@crescent.message_command(name="Report Message", guild=938699961112096768)
+@crescent.message_command(name="Report Message", guild=938699961112096768, default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
 async def report_message(ctx: crescent.Context, message: hikari.Message):
     await ctx.respond(content="Report received", ephemeral=True)
     report_channel: hikari.GuildTextChannel = ctx.guild.get_channel(1140965929824567377)

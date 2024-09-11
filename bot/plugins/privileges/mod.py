@@ -8,7 +8,7 @@ plugin = crescent.Plugin()
 
 @plugin.include
 @crescent.hook(is_mod)
-@crescent.command(name="1984", description="Assert Dominance", guild=938699961112096768)
+@crescent.command(name="1984", description="Assert Dominance", guild=938699961112096768, default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
 class Mute1984:
     member = crescent.option(hikari.User, "Member to silence")
     async def callback(self, ctx: crescent.Context):
@@ -29,7 +29,7 @@ class Mute1984:
 
 @plugin.include
 @crescent.hook(is_mod)
-@crescent.command(name="free", description="Release prisoner", guild=938699961112096768)
+@crescent.command(name="free", description="Release prisoner", guild=938699961112096768, default_member_permissions=hikari.Permissions.VIEW_CHANNEL)
 class Free1984:
     member = crescent.option(hikari.User, "Prisoner to free")
     async def callback(self, ctx: crescent.Context):
