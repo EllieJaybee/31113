@@ -4,6 +4,7 @@ import miru
 
 import asyncpraw
 from asyncpraw.models import Subreddit, Submission
+from random import choice
 
 from bot.__main__ import Model
 
@@ -32,14 +33,17 @@ async def reddit(ctx: crescent.Context | miru.ViewContext, subreddit: str):
     preddit = asyncpraw.Reddit(
         client_id=plugin.model.secret.REDDIT_ID,
         client_secret=plugin.model.secret.REDDIT_SECRET,
-        user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64)",
+        user_agent="Windows:31113:v100",
     )
     sub: Subreddit = await preddit.subreddit(subreddit, fetch=True)
     if sub.over18:
         if isinstance(ctx, crescent.Context) and not ctx.channel.is_nsfw:
             await preddit.close()
             return await ctx.respond("horny 🫵", ephemeral=True)
-    post: Submission = await sub.random()
+    posts = list()
+    async for gen_post in sub.random_rising():
+        posts.append(gen_post)
+    post: Submission = choice(posts)
     view = RedditView(subreddit=subreddit)
     respkwargs = {"components": view}
     if isinstance(ctx, crescent.Context):
