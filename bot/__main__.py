@@ -7,7 +7,9 @@ import miru
 from bot import secret
 
 parser = argparse.ArgumentParser(description="Run 31113")
-parser.add_argument("--debug", dest="debug", help="set log level to DEBUG", action="store_true")
+parser.add_argument(
+    "--debug", dest="debug", help="set log level to DEBUG", action="store_true"
+)
 args = parser.parse_args()
 
 
@@ -19,11 +21,13 @@ class Model:
 
 def main():
     intents = (
-        hikari.Intents.ALL_UNPRIVILEGED |
-        hikari.Intents.GUILD_MEMBERS    |
-        hikari.Intents.MESSAGE_CONTENT
+        hikari.Intents.ALL_UNPRIVILEGED
+        | hikari.Intents.GUILD_MEMBERS
+        | hikari.Intents.MESSAGE_CONTENT
     )
-    bot = hikari.GatewayBot(secret.TOKEN, banner="bot", intents=intents, force_color=True)
+    bot = hikari.GatewayBot(
+        secret.TOKEN, banner="bot", intents=intents, force_color=True
+    )
     logger = logging.getLogger("hikari.gateway")
     if args.debug:
         logger.setLevel("DEBUG")
@@ -45,6 +49,9 @@ def main():
         logger.info("Activated Saucenao Module")
     else:
         logger.warning("Saucenao credentials empty, ignoring..")
+    if all([secret.GELBOORU_KEY, secret.GELBOORU_ID]):
+        crescent_client.plugins.load_folder("bot.plugins.booru")
+        logger.info("Activated Gelbooru Module")
     bot.run()
 
 
