@@ -42,13 +42,16 @@ class BooruCommand:
             finaltags = finaltags.replace("loli", "")
             finaltags = finaltags.replace("shota", "")
             finaltags += "-loli -shota"
-        post = await cunnypy.search(
-            "gelbooru",
-            finaltags,
-            limit=1,
-            credentials={
-                "user_id": plugin.model.secret.GELBOORU_ID,
-                "api_key": plugin.model.secret.GELBOORU_KEY,
-            },
-        )
+        try:
+            post = await cunnypy.search(
+                "gelbooru",
+                finaltags,
+                limit=1,
+                credentials={
+                    "user_id": plugin.model.secret.GELBOORU_ID,
+                    "api_key": plugin.model.secret.GELBOORU_KEY,
+                },
+            )
+        except IndexError:
+            return await ctx.respond("No results found.")
         await ctx.respond(post[0].file_url)
