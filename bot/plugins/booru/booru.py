@@ -36,7 +36,7 @@ class BooruCommand:
                     " ", "_"
                 ) + " "
             except IndexError:
-                return ctx.respond(f'Tag "{tag}" not found.')
+                return await ctx.respond(f'Tag "{tag}" not found.')
         finaltags += f"rating:{self.rating} sort:random "
         if self.rating == "explicit":
             finaltags = finaltags.replace("loli", "")
