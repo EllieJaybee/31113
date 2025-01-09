@@ -67,7 +67,7 @@ class BooruCommand:
         final_tags = str()
         for tag in tags_list:
             try:
-                final_tags += (await cunnypy.autocomplete("gel", tag))[0].replace(
+                final_tags += (await cunnypy.autocomplete(self.booru, tag))[0].replace(
                     " ", "_"
                 ) + " "
             except IndexError:
