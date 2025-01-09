@@ -78,7 +78,7 @@ class BooruCommand:
             final_tags += "order:random "
         if self.booru == "db":
             final_tags += "age:<1year "
-        if self.rating == "explicit" and not self.booru == "db":
+        if self.rating == "explicit" and self.booru in ("gb", "e6"):
             final_tags = final_tags.replace("loli", "")
             final_tags = final_tags.replace("shota", "")
             final_tags += "-loli -shota"
