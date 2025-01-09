@@ -37,32 +37,55 @@ class BooruCommand:
 
     async def callback(self, ctx: crescent.Context):
         await ctx.defer()
+        credential_dict = {
+            "gb": {
+                "user_id": plugin.model.secret.GELBOORU_ID,
+                "api_key": plugin.model.secret.GELBOORU_KEY,
+            }
+            if all([plugin.model.secret.GELBOORU_ID, plugin.model.secret.GELBOORU_KEY])
+            else None,
+            "db": {
+                "login": plugin.model.secret.DANBOORU_LOGIN,
+                "api_key": plugin.model.secret.DANBOORU_KEY,
+            }
+            if all(
+                [plugin.model.secret.DANBOORU_LOGIN, plugin.model.secret.DANBOORU_KEY]
+            )
+            else None,
+            "e6": None,
+            "e9": None,
+        }
         if ctx.channel.is_nsfw is False and self.rating == "explicit":
             return await ctx.respond("horny 🫵")
-        listtags = self.tags.split(" ")
-        finaltags = str()
-        for tag in listtags:
+        tags_list = self.tags.split(" ")
+        final_tags = str()
+        for tag in tags_list:
             try:
-                finaltags += (await cunnypy.autocomplete("gel", tag))[0].replace(
+                final_tags += (await cunnypy.autocomplete("gel", tag))[0].replace(
                     " ", "_"
                 ) + " "
             except IndexError:
                 return await ctx.respond(f'Tag "{tag}" not found.')
-        finaltags += "sort:random " if self.booru == "gb" else "order:random"
-        if self.rating == "explicit":
-            finaltags = finaltags.replace("loli", "")
-            finaltags = finaltags.replace("shota", "")
-            finaltags += "-loli -shota"
+        if self.booru == "gb":
+            final_tags += "sort:random "
+        else:
+            final_tags += "order:random "
+        if self.booru == "db":
+            final_tags += "age:<1year "
+        if self.rating == "explicit" and not self.booru == "db":
+            final_tags = final_tags.replace("loli", "")
+            final_tags = final_tags.replace("shota", "")
+            final_tags += "-loli -shota"
         try:
             post = await cunnypy.search(
                 self.booru,
-                finaltags,
-                limit=1,
+                final_tags,
+                limit=10 if self.booru == "db" else 1,
                 rating=self.rating,
-                credentials={
-                    "user_id": plugin.model.secret.GELBOORU_ID,
-                    "api_key": plugin.model.secret.GELBOORU_KEY,
-                },
+                gatcha=True if self.booru == "db" else False,
+                credentials=credential_dict[self.booru]
+                if self.booru in ("gb", "db")
+                else None,
             )
             await ctx.respond(post[0].file_url)
         except IndexError:

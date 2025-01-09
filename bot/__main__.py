@@ -49,7 +49,12 @@ def main():
         logger.info("Activated Saucenao Module")
     else:
         logger.warning("Saucenao credentials empty, ignoring..")
-    if all([secret.GELBOORU_KEY, secret.GELBOORU_ID]):
+    if any(
+        [
+            all([secret.GELBOORU_KEY, secret.GELBOORU_ID]),
+            all([secret.DANBOORU_KEY, secret.DANBOORU_LOGIN]),
+        ]
+    ):
         crescent_client.plugins.load_folder("bot.plugins.booru")
         logger.info("Activated Gelbooru Module")
     bot.run()

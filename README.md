@@ -9,6 +9,7 @@ Main repository for 31113
     - `SAUCE_TOKEN` for SauceNao API token
     - `REDDIT_ID` and `REDDIT_SECRET` for Reddit data (follow [these steps](https://github.com/reddit-archive/reddit/wiki/OAuth2-Quick-Start-Example#first-steps) to obtain them)
     - `GELBOORU_KEY` and `GELBOORU_ID` for Gelbooru
+    - `DANBOORU_KEY` and `DANBOORU_LOGIN` for Danbooru
 
     ### Example
     ```python
@@ -19,6 +20,8 @@ Main repository for 31113
     REDDIT_SECRET = "redditappsecrethere"
     GELBOORU_KEY = "gelboorukeyhere"
     GELBOORU_ID = "gelbooruidhere"
+    DANBOORU_KEY = "danboorukeyhere"
+    DANBOORU_LOGIN = "danbooruloginhere"
     ```
 
 3. Run the bot with:
