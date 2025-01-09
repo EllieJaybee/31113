@@ -52,6 +52,6 @@ class BooruCommand:
                     "api_key": plugin.model.secret.GELBOORU_KEY,
                 },
             )
+            await ctx.respond(post[0].file_url)
         except IndexError:
             return await ctx.respond("No results found.")
-        await ctx.respond(post[0].file_url)
