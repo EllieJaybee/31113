@@ -20,8 +20,8 @@ class BooruCommand:
     rating = crescent.option(
         str,
         "The rating of the image",
-        default="safe",
-        choices=[("safe", "safe"), ("explicit", "explicit")],
+        default="auto",
+        choices=[("auto", "auto"), ("safe", "safe"), ("explicit", "explicit")],
     )
     booru = crescent.option(
         str,
@@ -55,8 +55,14 @@ class BooruCommand:
             "e6": None,
             "e9": None,
         }
-        if ctx.channel.is_nsfw is False and self.rating == "explicit":
-            return await ctx.respond("horny 🫵")
+        if ctx.channel.is_nsfw is False: 
+            if self.rating == "explicit":
+                return await ctx.respond("horny 🫵")
+            elif self.rating == "auto":
+                self.rating = "safe"
+        else:
+            if self.rating == "auto":
+                self.rating = "explicit"
         tags_list = self.tags.split(" ")
         final_tags = str()
         for tag in tags_list:
