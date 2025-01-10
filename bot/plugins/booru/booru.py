@@ -55,7 +55,7 @@ class BooruCommand:
             "e6": None,
             "e9": None,
         }
-        if ctx.channel.is_nsfw is False: 
+        if ctx.channel.is_nsfw is False:
             if self.rating == "explicit":
                 return await ctx.respond("horny 🫵")
             elif self.rating == "auto":
@@ -82,6 +82,9 @@ class BooruCommand:
             final_tags = final_tags.replace("loli", "")
             final_tags = final_tags.replace("shota", "")
             final_tags += "-loli -shota"
+        if self.booru == "gb":
+            final_tags += "-rating:general "
+            self.rating = None
         try:
             post = await cunnypy.search(
                 self.booru,
