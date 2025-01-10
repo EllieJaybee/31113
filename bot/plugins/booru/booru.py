@@ -9,23 +9,6 @@ Plugin = crescent.Plugin[hikari.GatewayBot, Model]
 plugin = Plugin()
 
 the_naughties = ("explicit", "questionable", "sensitive", "autoexplicit")
-credential_dict = {
-    "gb": {
-        "user_id": plugin.model.secret.GELBOORU_ID,
-        "api_key": plugin.model.secret.GELBOORU_KEY,
-    }
-    if all([plugin.model.secret.GELBOORU_ID, plugin.model.secret.GELBOORU_KEY])
-    else None,
-    "db": {
-        "login": plugin.model.secret.DANBOORU_LOGIN,
-        "api_key": plugin.model.secret.DANBOORU_KEY,
-    }
-    if all([plugin.model.secret.DANBOORU_LOGIN, plugin.model.secret.DANBOORU_KEY])
-    else None,
-    "e6": None,
-    "e9": None,
-    "r34": None,
-}
 
 
 @plugin.include
@@ -67,6 +50,25 @@ class BooruCommand:
 
     async def callback(self, ctx: crescent.Context):
         await ctx.defer()
+        credential_dict = {
+            "gb": {
+                "user_id": plugin.model.secret.GELBOORU_ID,
+                "api_key": plugin.model.secret.GELBOORU_KEY,
+            }
+            if all([plugin.model.secret.GELBOORU_ID, plugin.model.secret.GELBOORU_KEY])
+            else None,
+            "db": {
+                "login": plugin.model.secret.DANBOORU_LOGIN,
+                "api_key": plugin.model.secret.DANBOORU_KEY,
+            }
+            if all(
+                [plugin.model.secret.DANBOORU_LOGIN, plugin.model.secret.DANBOORU_KEY]
+            )
+            else None,
+            "e6": None,
+            "e9": None,
+            "r34": None,
+        }
         if ctx.channel.is_nsfw is False:
             if self.rating in the_naughties:
                 return await ctx.respond("horny 🫵")
