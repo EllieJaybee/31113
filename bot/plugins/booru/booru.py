@@ -82,7 +82,7 @@ class BooruCommand:
             final_tags = final_tags.replace("loli", "")
             final_tags = final_tags.replace("shota", "")
             final_tags += "-loli -shota"
-        if self.booru == "gb":
+        if self.rating == "explicit" and self.booru == "gb":
             final_tags += "-rating:general "
             self.rating = None
         try:
