@@ -89,6 +89,8 @@ class BooruCommand:
                 return await ctx.respond(f'Tag "{tag}" not found.')
         if self.booru == "gb":
             final_tags += "sort:random "
+        elif self.booru == "r34":
+            pass
         else:
             final_tags += "order:random "
         if self.booru == "db":
@@ -116,9 +118,9 @@ class BooruCommand:
             post = await cunnypy.search(
                 self.booru,
                 final_tags,
-                limit=10 if self.booru == "db" else 1,
+                limit=10 if self.booru in ("db", "r34") else 1,
                 rating=self.rating,
-                gatcha=True if self.booru == "db" else False,
+                gatcha=True if self.booru in ("db", "r34") else False,
                 credentials=credential_dict[self.booru]
                 if self.booru in ("gb", "db")
                 else None,
