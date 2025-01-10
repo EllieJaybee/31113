@@ -16,12 +16,22 @@ plugin = Plugin()
     default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
 )
 class BooruCommand:
-    tags = crescent.option(str, "The tags to search for separated by comma. For example: thistle (dungeon meshi), 1boy")
+    tags = crescent.option(
+        str,
+        "The tags to search for separated by comma. For example: thistle (dungeon meshi), 1boy",
+    )
     rating = crescent.option(
         str,
         "The rating of the image",
         default="auto",
-        choices=[("auto", "auto"), ("safe", "safe"), ("explicit", "explicit")],
+        choices=[
+            ("auto", "auto"),
+            ("safe", "safe"),
+            ("explicit", "explicit"),
+            ("questionable", "questionable"),
+            ("sensitive", "sensitive"),
+            ("general", "general"),
+        ],
     )
     booru = crescent.option(
         str,
@@ -32,6 +42,7 @@ class BooruCommand:
             ("E621", "e6"),
             ("E926", "e9"),
             ("Danbooru", "db"),
+            ("Rule34", "r34"),
         ],
     )
 
@@ -56,20 +67,24 @@ class BooruCommand:
             "e9": None,
         }
         if ctx.channel.is_nsfw is False:
-            if self.rating == "explicit":
+            if self.rating in (
+                "explicit",
+                "questionable",
+                "sensitive",
+            ):
                 return await ctx.respond("horny 🫵")
             elif self.rating == "auto":
                 self.rating = "safe"
         else:
             if self.rating == "auto":
-                self.rating = "explicit"
+                self.rating = "autoexplicit"
         tags_list = [_.strip().replace(" ", "_") for _ in self.tags.split(",")]
         final_tags = str()
         for tag in tags_list:
             try:
-                final_tags += (await cunnypy.autocomplete(self.booru, f"{tag}*"))[0].replace(
-                    " ", "_"
-                ) + " "
+                final_tags += (await cunnypy.autocomplete(self.booru, f"{tag}*"))[
+                    0
+                ].replace(" ", "_") + " "
             except IndexError:
                 return await ctx.respond(f'Tag "{tag}" not found.')
         if self.booru == "gb":
@@ -78,13 +93,25 @@ class BooruCommand:
             final_tags += "order:random "
         if self.booru == "db":
             final_tags += "age:<1year "
-        if self.rating == "explicit" and self.booru in ("gb", "e6"):
+        if self.rating in (
+            "explicit",
+            "questionable",
+            "sensitive",
+            "autoexplicit",
+        ) and self.booru in (
+            "gb",
+            "e6",
+        ):
             final_tags = final_tags.replace("loli", "")
             final_tags = final_tags.replace("shota", "")
             final_tags += "-loli -shota"
-        if self.rating == "explicit" and self.booru == "gb":
-            final_tags += "-rating:general "
-            self.rating = None
+        if self.rating == "autoexplicit":
+            if self.booru == "gb":
+                final_tags += "-rating:general "
+                self.rating = None
+            else:
+                final_tags += "-rating:safe "
+                self.rating = None
         try:
             post = await cunnypy.search(
                 self.booru,
