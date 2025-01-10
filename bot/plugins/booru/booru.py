@@ -16,7 +16,7 @@ plugin = Plugin()
     default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
 )
 class BooruCommand:
-    tags = crescent.option(str, "The tags to search for.")
+    tags = crescent.option(str, "The tags to search for. For example: thistle_(dungeon_meshi) 1boy")
     rating = crescent.option(
         str,
         "The rating of the image",
