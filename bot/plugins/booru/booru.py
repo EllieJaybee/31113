@@ -8,6 +8,25 @@ from bot.__main__ import Model
 Plugin = crescent.Plugin[hikari.GatewayBot, Model]
 plugin = Plugin()
 
+the_naughties = ("explicit", "questionable", "sensitive", "autoexplicit")
+credential_dict = {
+    "gb": {
+        "user_id": plugin.model.secret.GELBOORU_ID,
+        "api_key": plugin.model.secret.GELBOORU_KEY,
+    }
+    if all([plugin.model.secret.GELBOORU_ID, plugin.model.secret.GELBOORU_KEY])
+    else None,
+    "db": {
+        "login": plugin.model.secret.DANBOORU_LOGIN,
+        "api_key": plugin.model.secret.DANBOORU_KEY,
+    }
+    if all([plugin.model.secret.DANBOORU_LOGIN, plugin.model.secret.DANBOORU_KEY])
+    else None,
+    "e6": None,
+    "e9": None,
+    "r34": None,
+}
+
 
 @plugin.include
 @crescent.command(
@@ -48,30 +67,8 @@ class BooruCommand:
 
     async def callback(self, ctx: crescent.Context):
         await ctx.defer()
-        credential_dict = {
-            "gb": {
-                "user_id": plugin.model.secret.GELBOORU_ID,
-                "api_key": plugin.model.secret.GELBOORU_KEY,
-            }
-            if all([plugin.model.secret.GELBOORU_ID, plugin.model.secret.GELBOORU_KEY])
-            else None,
-            "db": {
-                "login": plugin.model.secret.DANBOORU_LOGIN,
-                "api_key": plugin.model.secret.DANBOORU_KEY,
-            }
-            if all(
-                [plugin.model.secret.DANBOORU_LOGIN, plugin.model.secret.DANBOORU_KEY]
-            )
-            else None,
-            "e6": None,
-            "e9": None,
-        }
         if ctx.channel.is_nsfw is False:
-            if self.rating in (
-                "explicit",
-                "questionable",
-                "sensitive",
-            ):
+            if self.rating in the_naughties:
                 return await ctx.respond("horny 🫵")
             elif self.rating == "auto":
                 self.rating = "safe"
@@ -95,12 +92,7 @@ class BooruCommand:
             final_tags += "order:random "
         if self.booru == "db":
             final_tags += "age:<1year "
-        if self.rating in (
-            "explicit",
-            "questionable",
-            "sensitive",
-            "autoexplicit",
-        ) and self.booru in (
+        if self.rating in the_naughties and self.booru in (
             "gb",
             "e6",
         ):
