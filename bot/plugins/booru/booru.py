@@ -16,7 +16,7 @@ plugin = Plugin()
     default_member_permissions=hikari.Permissions.VIEW_CHANNEL,
 )
 class BooruCommand:
-    tags = crescent.option(str, "The tags to search for. For example: thistle_(dungeon_meshi) 1boy")
+    tags = crescent.option(str, "The tags to search for separated by comma. For example: thistle (dungeon meshi), 1boy")
     rating = crescent.option(
         str,
         "The rating of the image",
@@ -63,7 +63,7 @@ class BooruCommand:
         else:
             if self.rating == "auto":
                 self.rating = "explicit"
-        tags_list = self.tags.split(" ")
+        tags_list = [_.strip().replace(" ", "_") for _ in self.tags.split(",")]
         final_tags = str()
         for tag in tags_list:
             try:
