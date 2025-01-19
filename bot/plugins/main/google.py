@@ -15,7 +15,7 @@ async def request(params: dict = None) -> bs:
     async with aiohttp.ClientSession() as session:
         async with session.get(
             url,
-            headers={"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"},
+            headers={"User-Agent": "w3m/0.5.3+git20230121"},
             params=params,
         ) as response:
             response_text = await response.text()
@@ -26,15 +26,15 @@ async def _search(ctx: crescent.Context, query: str) -> hikari.Message | None:
     soup = await request(
         params={"q": query, "safe": "off" if ctx.channel.is_nsfw else "strict"}
     )
-    results = soup.find_all("div", class_="egMi0 kCrYT")
+    results = soup.find_all("a", class_="fuLhoc ZWRArf")
     for result in results:
         if (
-            result.a is not None
-            and result.a["href"].startswith("/url")
-            and "scholar.google" not in result.a["href"]
+            result is not None
+            and result["href"].startswith("/url")
+            and "scholar.google" not in result["href"]
         ):
             return await ctx.respond(
-                urllib.parse.unquote(result.a["href"]).split("?q=")[1].split("&sa=")[0]
+                urllib.parse.unquote(result["href"]).split("?q=")[1].split("&sa=")[0]
             )
     await ctx.respond(content="No results found :c")
 
@@ -80,13 +80,13 @@ class Calculate:
 
     async def callback(self, ctx: crescent.Context):
         await ctx.defer()
-        soup = await request(params={"q": self.query})
-        question = soup.find("span", class_="BNeawe tAd8D AP7Wnd")
+        soup = await request(params={"q": f"calculate {self.query}"})
+        question = soup.find("span", class_="F9iS2e")
         if not question:
             await ctx.respond("Calculation invalid, reverting to a search...")
             return await _search(ctx, self.query)
         question = question.text
-        answer = soup.find("div", class_="BNeawe iBp4i AP7Wnd").text
+        answer = soup.find("span", class_="qXLe6d epoveb").text
         embed = hikari.Embed(description=f"```\n{question}\n{answer}\n```")
         await ctx.respond(embed=embed)
 
@@ -103,20 +103,18 @@ class Define:
     async def callback(self, ctx: crescent.Context):
         await ctx.defer()
         soup = await request(params={"q": f"define {self.query}"})
-        root = soup.find_all("div", class_="kCrYT")
-        root2 = root[1].find("div", class_="Ap5OSd")
-        if not root2:
+        phrase = soup.find("span", class_="qXLe6d x3G5ab").text
+        pronounciation = soup.find("span", class_="qXLe6d F9iS2e").text
+        type = soup.find("span", class_="qXLe6d FrIlee").text
+        try:
+            apsos = soup.find_all("div", class_="CSfvHb")[1]
+        except IndexError:
             await ctx.respond("Phrase invalid, reverting to a search...")
             return await _search(ctx, self.query)
-        root2 = root2.contents
-        phrase = root[0].span.h3.text
-        pronounciation = root[0].contents[1].text
-        type = root2[0].text.strip()
-        apsos = root[1].div.find_all("div", class_="Ap5OSd")[1]
         try:
-            meaning = apsos.ol.li.div.div.text
+            meaning = apsos.ol.li.span.span.text
         except AttributeError:
-            meaning = apsos.div.div.div.text
+            meaning = apsos.div.span.span.text
         e = hikari.Embed(title=phrase, description=meaning).add_field(
             name=type, value=f"({pronounciation})"
         )
@@ -135,12 +133,12 @@ class Weather:
     async def callback(self, ctx: crescent.Context):
         await ctx.defer()
         soup = await request(params={"q": f"weather {self.query}"})
-        main_weather = soup.find("div", class_="BNeawe tAd8D AP7Wnd")
+        main_weather = soup.find("span", class_="qXLe6d F9iS2e")
         if not main_weather:
             await ctx.respond("Query invalid, reverting to a search...")
             return await _search(ctx, self.query)
         main_weather = main_weather.text
-        supplementary_temperature = soup.find("div", class_="BNeawe iBp4i AP7Wnd").text
+        supplementary_temperature = soup.find("span", class_="qXLe6d epoveb").text
         response = f"{main_weather} {supplementary_temperature}"
         await ctx.respond(response)
 
