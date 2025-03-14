@@ -65,7 +65,7 @@ class Answer:
     async def callback(self, ctx: crescent.Context):
         await ctx.defer()
         soup = await request(params={"q": self.query})
-        result = soup.find("div", class_="BNeawe s3v9rd AP7Wnd")
+        result = soup.find("span", class_="qXLe6d FrIlee")
         await ctx.respond(result.text)
 
 
