@@ -139,7 +139,7 @@ class Weather:
             return await _search(ctx, self.query)
         main_weather = main_weather.text
         supplementary_temperature = soup.find("span", class_="qXLe6d epoveb").text
-        response = f"{main_weather} {supplementary_temperature}"
+        response = (f"{main_weather} {supplementary_temperature}").replace("\n ", "\n")
         await ctx.respond(response)
 
 
