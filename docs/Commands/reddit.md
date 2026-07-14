@@ -14,7 +14,7 @@ icon: material/reddit
     ```
 
     ```
-    [⠀](https://rxddit.com/r/cats/comments/1azy57g/white_kindness/)
+    [⠀](https://vxreddit.com/r/cats/comments/1azy57g/white_kindness/)
     ```
 
     !!! note
