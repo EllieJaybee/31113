@@ -1,5 +1,4 @@
 asyncpraw==7.8.1
-anime-api==1.0.2
 beautifulsoup4==4.12.3
 hikari-crescent==1.0.0
 hikari-miru==4.1.1

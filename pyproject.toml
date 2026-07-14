@@ -5,7 +5,6 @@ description = "01001110011001010111011001100101011100100010000001100111011011110
 readme = "README.md"
 requires-python = ">=3.13, <3.14"
 dependencies = [
-    "anime-api==1.0.2",
     "asyncpraw==7.8.1",
     "beautifulsoup4==4.12.3",
     "hikari-crescent==1.0.0",
