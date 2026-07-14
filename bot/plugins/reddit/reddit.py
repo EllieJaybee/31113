@@ -49,7 +49,7 @@ async def reddit(ctx: crescent.Context | miru.ViewContext, subreddit: str):
     if isinstance(ctx, crescent.Context):
         respkwargs["ensure_message"] = True
     message = await ctx.respond(
-        f"[⠀](https://rxddit.com{post.permalink})", **respkwargs
+        f"[⠀](https://vxreddit.com{post.permalink})", **respkwargs
     )
     await preddit.close()
     if isinstance(ctx, miru.ViewContext):
