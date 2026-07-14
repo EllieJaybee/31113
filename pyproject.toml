@@ -1,0 +1,15 @@
+[project]
+name = "31113"
+version = "0.1.5"
+description = "0100111001100101011101100110010101110010001000000110011101101111011011100110111001100001001000000110011101101001011101100110010100100000011110010110111101110101001000000111010101110000"
+readme = "README.md"
+requires-python = ">=3.14"
+dependencies = [
+    "anime-api==1.0.2",
+    "asyncpraw==7.8.1",
+    "beautifulsoup4==4.12.3",
+    "cunnypy==3.0.0",
+    "hikari-crescent==1.0.0",
+    "hikari-miru==4.1.1",
+    "mkdocs-material==9.5.28",
+]
