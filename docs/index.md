@@ -7,12 +7,6 @@ icon: material/book-open-variant-outline
 
 <div class="grid cards" markdown>
 
--   [:material-google: __Google Commands__](Commands/google.md)
-
-    ---
-
-    For commands related to search queries
-
 -   [:material-robot-outline: __Meta Commands__](Commands/meta.md)
     
     ---
