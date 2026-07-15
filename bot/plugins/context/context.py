@@ -18,7 +18,7 @@ class NoSauceError(IndexError):
 )
 async def sauce(ctx: crescent.Context, message: hikari.Message):
     await ctx.defer(ephemeral=True)
-    sauceclient = SauceNao(api_key=plugin.model.secret.SAUCE_TOKEN, results_limit=1)
+    sauceclient = SauceNao(api_key=plugin.model.secret.SAUCE_TOKEN, max_results=1)
     if message.attachments:
         for att in message.attachments:
             sourced = await sauceclient.from_url(att.url)
@@ -39,12 +39,12 @@ async def sauce(ctx: crescent.Context, message: hikari.Message):
 @plugin.include
 @crescent.catch_command(NoSauceError)
 async def no_sauce_handler(err: NoSauceError, ctx: crescent.Context):
-    await ctx.respond("Can't sauce message :<")
+    await ctx.respond("No sauce found")
 
 
 @plugin.include
-@crescent.catch_command(errors.InvalidImageException)
+@crescent.catch_command(errors.InvalidImageError)
 async def invalid_image_handler(
-    err: errors.InvalidImageException, ctx: crescent.Context
+    err: errors.InvalidImageError, ctx: crescent.Context
 ):
     await ctx.respond("Invalid url")

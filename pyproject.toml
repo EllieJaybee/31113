@@ -10,5 +10,5 @@ dependencies = [
     "hikari-crescent==1.0.0",
     "hikari-miru==4.1.1",
     "mkdocs-material==9.5.28",
-    "pysaucenao==1.6.3",
+    "pysaucenao==2.0.1",
 ]
